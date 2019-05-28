@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="javascripts/popper.min.js"></script>
+    <script src="javascripts/jquery-3.4.0.js"></script>
+    <script src="javascripts/xlsx.full.min.js"></script>
+    <script src="javascripts/re.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Berkshire+Swash">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Yantramanav">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
+    <link rel="stylesheet" href="stylesheets/main.css">
+
+    <link rel="shortcut icon" href="#" />
+    <title>TIMELINE</title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-light bg-dark">
+      <a class="navbar-brand text-white title">Timeline</a>
+
+      <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Adauga element
+          </button>
+          <div class="dropdown-menu" style="min-width: 20rem;" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-item input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">Nume</span>
+                </div>
+                <input type="text" id="input_nume" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <div class="dropdown-item input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">Ocupatie</span>
+                </div>
+                <input type="text" id="input_ocupatie" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <p class="dropdown-item" style="font-size:100%;">Interval:</p>
+            <div class="dropdown-item year-interval">
+              <input class="form-control w-25" id="year_start" type="text" placeholder="0">
+              <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="defaultUnchecked1">
+                  <label class="custom-control-label" for="defaultUnchecked1">î.Hr.</label>
+              </div>
+              _
+              <input class="form-control w-25" id="year_end" type="text" placeholder="3000">
+              <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="defaultUnchecked2">
+                  <label class="custom-control-label" for="defaultUnchecked2">î.Hr.</label>
+              </div>
+            </div>
+            <div class="dropdown-item form-group">
+                <label for="exampleFormControlTextarea1">Descriere: </label>
+                <textarea class="form-control" id="input_descriere" rows="3"></textarea>
+            </div>
+            <div class="add-button"><button type="button" id="add_button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="right" data-content="Eroare">
+                ADAUGA
+              </button></div>
+          </div>
+      </div>
+  
+
+      <form class="form-inline" action="/test/submit" method="post">
+        <input class="form-control mr-sm-2" name="search_bar" type="search" placeholder="Cauta" aria-label="Search">
+        <button class="btn btn-success my-2 my-sm-0" id="search_button" type="submit">Cauta</button>
+      </form>
+      <input type="file" id="file_browser" accept=".xlsx" hidden="hidden">
+      <input class="btn btn-success my-2 my-sm-0" id="upload_button" value='UPLOAD' type="button">
+    </nav>
+
+    <div id="inner" class="inner_remaining">
+      <div class="axis" style='justify-content: space-around;'></div>
+      <div id="bar_id" class="bar-axis"></div>
+    </div>
+  </body>
+</html>
