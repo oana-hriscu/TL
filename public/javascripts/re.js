@@ -1,11 +1,14 @@
 $(function() {
 
-  let input_years = [];
+  let min_year=5000;
+  let max_year=-5000;
+
+  let p_list = [];
 
   function range10(start, end) {
     let yearList = [];
     for(item = start - start%10; item<=end - end%10 + 10; item+=10){
-      yearList.push(String(item));
+      yearList.push(item);
     }
     return yearList;
   }
@@ -54,11 +57,11 @@ $(function() {
     let container = $('.axis');
     container.empty();
 
-    if(yearList.length<=40) {
+    if(yearList.length<=42) {
       for(let i=0; i < yearList.length; i++) {
-        let paragraph = $('<p/>').attr('id', 'year_tag').text(yearList[i]);
+        let paragraph = $('<p/>').attr('id', 'year_tag').addClass('axis-year').text(yearList[i]);
         let line = $('<hr/>').addClass('vertical-line');
-        let div = $('<div id="axis_element"></div>');
+        let div = $('<div id="axis_element" class="axis-element"></div>');
         paragraph.appendTo(div);
         line.appendTo(div);
         
@@ -68,16 +71,15 @@ $(function() {
     else {
       $('.axis').css("justify-content", "");
       for(let i=0; i < yearList.length; i++) {
-        let paragraph = $('<p/>').attr('id', 'year_tag').text(yearList[i]);
+        let paragraph = $('<p/>').attr('id', 'year_tag').addClass('axis-year').text(yearList[i]);
         let line = $('<hr/>').addClass('vertical-line');
-        let div = $('<div id="axis_element" style="padding-left: 5px; padding-right: 5px"></div>'); //0.5%
+        let div = $('<div id="axis_element" class="axis-element"></div>'); //0.5% style="padding-left: 5px; padding-right: 5px"
         paragraph.appendTo(div);
         line.appendTo(div);
         
         div.appendTo(container);
       }
     }
-    console.log($('#year_tag').height());
     $('#bar_id').css('margin-top', $('#year_tag').height());
     
   }
@@ -119,32 +121,36 @@ $(function() {
     }
   }
 
-  function addTLElement(nume, start, end, ocupatie, desc) {
+  function addTLElements(listOfPeople, years) {
     let container = $('#bar_id');
-    let unit = $('#axis_element').outerWidth() + 4.9188; //width of year-bar element
-    //unit = 39.37;
-    let width = unit * input_years.length; //width of container
-    let margin = unit/2; //add to everything
+    container.empty();
+    let margin = $('.vertical-line').offset()['left']+0.5; //add to everything
+    let unit = margin *2; //width of year-bar element
+    console.log(margin, unit);
+    let width = unit * years.length; //width of container
     
-    let span = (end - start) / 10 * unit //life span in pixels (65 years = 6.5 units => 6.5* unit= pixels)
-    let yearPos = input_years.indexOf(String(start- start%10));
-  
-    let mgLeft = margin +  (yearPos + (start%10)/10) * unit;
+    for(let i=0; i<listOfPeople.length; i++) {
+      let span = (listOfPeople[i]['deces'] - listOfPeople[i]['nastere']) / 10 * unit //life span in pixels (65 years = 6.5 units => 6.5* unit= pixels)
+      let yearPos = years.indexOf(listOfPeople[i]['nastere']- listOfPeople[i]['nastere']%10);
+      //console.log('pozitie: ', start- start%10);
+      //console.log('yearPos:', yearPos);
+      let mgLeft = margin +  (yearPos + (listOfPeople[i]['nastere']%10)/10) * unit;
 
-    let person = $('<p></p>').addClass('person')
-    .css('margin-left', String(mgLeft)+'px')
-    .text(nume+' ('+start+'-'+end+')')
-    .appendTo(container);
-    let arrow = $('<div/>').addClass('arrow').appendTo(person);
-    let drop = $('<div/>').addClass('drop').appendTo(arrow);
-    //$('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: listOfPeople[i]['Nume'].split(' ')[1]+'.jpg'})).appendTo(drop);
-    $('<div/>').addClass('line one').text(nume).appendTo(drop);
-    $('<div/>').addClass('line two').text(ocupatie).appendTo(drop);
-      
-    let bar = $('<hr></hr>').addClass('bars');
-    bar.css('width', String(span) + 'px');
-    bar.css('margin-left', String(mgLeft)+'px');
-    bar.appendTo(container);
+      let person = $('<p></p>').addClass('person')
+      .css('margin-left', mgLeft+'px')
+      .text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-'+listOfPeople[i]['deces']+')')
+      .appendTo(container);
+      let arrow = $('<div/>').addClass('arrow').appendTo(person);
+      let drop = $('<div/>').addClass('drop').appendTo(arrow);
+      $('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: 'face.jpg'})).appendTo(drop);
+      $('<div/>').addClass('line one').text(listOfPeople[i]['_nume']).appendTo(drop);
+      $('<div/>').addClass('line two').text(listOfPeople[i]['ocupatie']).appendTo(drop);
+        
+      let bar = $('<hr></hr>').addClass('bars');
+      bar.css('width', String(span) + 'px');
+      bar.css('margin-left', String(mgLeft)+'px');
+      bar.appendTo(container);
+    }
 
     if ($('#bar_id').height() > $('.axis').height()) {
       $('.vertical-line').css('height', $('#bar_id').height()+ 10 + 'px');
@@ -172,25 +178,69 @@ $(function() {
     }); 
   });
 
+  function checkYears(start, end, startCheck, endCheck) {
+    if(start < end) {
+      if((startCheck==true && endCheck==true) || (startCheck==false && endCheck==true)){
+        return false;
+      }
+    }
+    if(start > end) {
+      if((startCheck==false && endCheck==false) || (startCheck==false && endCheck==true)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   function validateForm() {
     let nume = $('#input_nume').val();
     let ocup = $('#input_ocupatie').val();
     let start = parseInt($('#year_start').val());
+    let startCheck = $('#start_checkbox').is(':checked');
     let end = parseInt($('#year_end').val());
+    let endCheck = $('#end_checkbox').is(':checked'); 
     let desc = $('#input_descriere').val();
-    console.log(nume, ocup, start, end, desc);
+
+    if (!checkYears(start, end, startCheck, endCheck)) {
+      console.log('false');
+      return false;
+    }
 
     if(nume=='' || ocup=='' || start=='' || end=='' || desc=='' ) {
       //$('#add_button').popover('enable');
       return false;
     }
     else {
-      input_years.push(start, end);
-      input_years.sort((a, b) => (a > b) ? 1 : -1);
-      console.log(input_years);
-      let years = range10(input_years[0], input_years[input_years.length-1]);
+      if(startCheck){
+        start *= -1;
+      }
+      if(endCheck){
+        end *= -1;
+      }
+
+      if(start < min_year){
+        min_year=start;
+      }
+
+      if(end > max_year){
+        max_year=end;
+      }
+      let years = range10(min_year, max_year);
       yearAxis(years);
-      addTLElement(nume, start, end, ocup, desc);
+
+      console.log(years);
+
+      var pDict = {
+        _nume: nume,
+        ocupatie: ocup,
+        nastere: start,
+        deces: end,
+        descriere: desc
+        };
+
+      p_list.push(pDict);
+      console.log(p_list);
+      addTLElements(p_list, years);
       return true;
     } 
   };
@@ -222,7 +272,3 @@ $(function() {
 
 
 });
-
-
-
-  //https://www.google.com/search?q=francis+bacon&as_epq=filozof&num=10&lr=lang_ro

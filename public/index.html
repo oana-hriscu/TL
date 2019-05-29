@@ -21,6 +21,17 @@
     <nav class="navbar navbar-light bg-dark">
       <a class="navbar-brand text-white title">Timeline</a>
 
+      <div class="form-group">
+        <label for="exampleFormControlSelect1" style="color:white;" >Interval</label>
+        <select class="form-control" id="exampleFormControlSelect1">
+          <option>1</option>
+          <option>5</option>
+          <option>10</option>
+          <option>50</option>
+          <option>100</option>
+        </select>
+      </div>
+
       <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Adauga element
@@ -42,14 +53,14 @@
             <div class="dropdown-item year-interval">
               <input class="form-control w-25" id="year_start" type="text" placeholder="0">
               <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="defaultUnchecked1">
-                  <label class="custom-control-label" for="defaultUnchecked1">î.Hr.</label>
+                  <input type="checkbox" class="custom-control-input" id="start_checkbox">
+                  <label class="custom-control-label" for="start_checkbox">î.Hr.</label>
               </div>
               _
               <input class="form-control w-25" id="year_end" type="text" placeholder="3000">
               <div class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" id="defaultUnchecked2">
-                  <label class="custom-control-label" for="defaultUnchecked2">î.Hr.</label>
+                  <input type="checkbox" class="custom-control-input" id="end_checkbox">
+                  <label class="custom-control-label" for="end_checkbox">î.Hr.</label>
               </div>
             </div>
             <div class="dropdown-item form-group">
@@ -62,7 +73,6 @@
           </div>
       </div>
   
-
       <form class="form-inline" action="/test/submit" method="post">
         <input class="form-control mr-sm-2" name="search_bar" type="search" placeholder="Cauta" aria-label="Search">
         <button class="btn btn-success my-2 my-sm-0" id="search_button" type="submit">Cauta</button>
