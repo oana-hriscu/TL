@@ -5,9 +5,17 @@ $(function() {
 
   let p_list = [];
 
-  function range10(start, end) {
+  function range_int(start, end, interval) {
     let yearList = [];
-    for(item = start - start%10; item<=end - end%10 + 10; item+=10){
+    for(item = start - start%interval; item<=end - end%interval + interval; item+=interval){
+      yearList.push(item);
+    }
+    return yearList;
+  }
+
+  function range1(start, end) {
+    let yearList = [];
+    for(item = start; item<=end; item++){
       yearList.push(item);
     }
     return yearList;
@@ -45,16 +53,14 @@ $(function() {
       return a.Nastere - b.Nastere;
     });
 
-    console.log(listOfPeople);
-
-    let years = range10(minimum, maximum);
+    let years = range_int(minimum, maximum);
     yearAxis(years);
     $( document ).ready(bars(listOfPeople, years)); 
   }
 
   function yearAxis(yearList){
 
-    let container = $('.axis');
+    let container = $('#axis');
     container.empty();
 
     if(yearList.length<=42) {
@@ -69,7 +75,7 @@ $(function() {
       }
     }
     else {
-      $('.axis').css("justify-content", "");
+      $('#axis').css("justify-content", "");
       for(let i=0; i < yearList.length; i++) {
         let paragraph = $('<p/>').attr('id', 'year_tag').addClass('axis-year').text(yearList[i]);
         let line = $('<hr/>').addClass('vertical-line');
@@ -116,25 +122,22 @@ $(function() {
       bar.appendTo(container);
     }
 
-    if ($('#bar_id').height() > $('.axis').height()) {
+    if ($('#bar_id').height() > $('#axis').height()) {
       $('.vertical-line').css('height', $('#bar_id').height()+ 10 + 'px');
     }
   }
 
-  function addTLElements(listOfPeople, years) {
+  function addTLElements(listOfPeople, years, interval) {
     let container = $('#bar_id');
     container.empty();
     let margin = $('.vertical-line').offset()['left']+0.5; //add to everything
     let unit = margin *2; //width of year-bar element
-    console.log(margin, unit);
     let width = unit * years.length; //width of container
     
     for(let i=0; i<listOfPeople.length; i++) {
-      let span = (listOfPeople[i]['deces'] - listOfPeople[i]['nastere']) / 10 * unit //life span in pixels (65 years = 6.5 units => 6.5* unit= pixels)
-      let yearPos = years.indexOf(listOfPeople[i]['nastere']- listOfPeople[i]['nastere']%10);
-      //console.log('pozitie: ', start- start%10);
-      //console.log('yearPos:', yearPos);
-      let mgLeft = margin +  (yearPos + (listOfPeople[i]['nastere']%10)/10) * unit;
+      let span = (listOfPeople[i]['deces'] - listOfPeople[i]['nastere']) / interval * unit //life span in pixels (65 years = 6.5 units => 6.5* unit= pixels)
+      let yearPos = years.indexOf(listOfPeople[i]['nastere']- listOfPeople[i]['nastere'] % interval);
+      let mgLeft = margin +  (yearPos + (listOfPeople[i]['nastere'] % interval) / interval) * unit;
 
       let person = $('<p></p>').addClass('person')
       .css('margin-left', mgLeft+'px')
@@ -147,12 +150,13 @@ $(function() {
       $('<div/>').addClass('line two').text(listOfPeople[i]['ocupatie']).appendTo(drop);
         
       let bar = $('<hr></hr>').addClass('bars');
+      bar.css('background', listOfPeople[i]['culoare']);
       bar.css('width', String(span) + 'px');
       bar.css('margin-left', String(mgLeft)+'px');
       bar.appendTo(container);
     }
 
-    if ($('#bar_id').height() > $('.axis').height()) {
+    if ($('#bar_id').height() > $('#axis').height()) {
       $('.vertical-line').css('height', $('#bar_id').height()+ 10 + 'px');
     }
 
@@ -193,13 +197,17 @@ $(function() {
   }
 
   function validateForm() {
+    let interval = parseInt($('#interval').val());
+
     let nume = $('#input_nume').val();
     let ocup = $('#input_ocupatie').val();
+    let colour = $('#colour_box').css('background-color');
     let start = parseInt($('#year_start').val());
     let startCheck = $('#start_checkbox').is(':checked');
     let end = parseInt($('#year_end').val());
     let endCheck = $('#end_checkbox').is(':checked'); 
     let desc = $('#input_descriere').val();
+
 
     if (!checkYears(start, end, startCheck, endCheck)) {
       console.log('false');
@@ -207,7 +215,6 @@ $(function() {
     }
 
     if(nume=='' || ocup=='' || start=='' || end=='' || desc=='' ) {
-      //$('#add_button').popover('enable');
       return false;
     }
     else {
@@ -225,50 +232,83 @@ $(function() {
       if(end > max_year){
         max_year=end;
       }
-      let years = range10(min_year, max_year);
-      yearAxis(years);
 
-      console.log(years);
+      let years;
+      if(interval === 1){
+        years = range1(min_year, max_year);
+      }
+      else {
+        years = range_int(min_year, max_year, interval);
+      }
+
+      yearAxis(years);
+      
 
       var pDict = {
         _nume: nume,
         ocupatie: ocup,
         nastere: start,
         deces: end,
-        descriere: desc
+        descriere: desc,
+        culoare: colour
         };
 
       p_list.push(pDict);
-      console.log(p_list);
-      addTLElements(p_list, years);
+      addTLElements(p_list, years, interval);
       return true;
     } 
   };
 
   $('#add_button').click(function() {
     if (validateForm()) {
-      //$('#add_button').popover('disable');
       $(this).parents('.dropdown').find('button.dropdown-toggle').dropdown('toggle')
+      $('#interval').attr('disabled', true);
     }
+  });
+
+  $('#reset_button').click(function() {
+    $('#axis').empty();
+    $('#bar_id').empty();
+    $('#interval').attr('disabled', false);
+    min_year=5000;
+    max_year=-5000;
+    p_list.length=0;
   });
 
   $(document).on('click', 'div.dropdown div.dropdown-menu', function (e) {
     e.stopPropagation();
   });
 
+  $("#search_form").submit(function(event) {
+    $("#info_box").empty();
+    event.preventDefault();
+    let $form = $( this ),
+        url = $form.attr('action');
 
+    /* Send the data using post with element id name and name2*/
+    var posting = $.post( url, { name: $('#search_bar').val()} );
 
-  // $('#search_button').click(function() {
-  //   if(!$('#search_bar').val()) {
-  //   }
-  //   else {
-  //     let s = $('#search_bar').val().replace(/ /g, '+');
-  //     $.get('https://www.google.com/search?q='+s+'&num=5&lr=lang_ro', function( data ) {
-  //       let page = data;
-  //       console.log(page);
-  //   });
-  //   }
-  // });
+    /* Alerts the results */
+    posting.done(function( data ) {
+      for (let i = 0; i < data[1].length; i++) {
+        let entry = $('<div/>').addClass('entry');
+        let title = $('<p/>').addClass('entry-title').text(data[1][i]);
+        let desc = $('<p/>').addClass('entry-desc').text(data[2][i]);
+        let about = $('<div/>').addClass('entry-about');
+        let pic = $('<img/>').addClass('entry-image');
+        let btn = $('<button type="button" class="btn mini-add" data-container="body" data-toggle="popover" data-placement="right" data-content="Eroare">ADAUGA</button>');
+
+        about.append(title);
+        about.append(desc);
+        about.append(btn);
+
+        entry.append(pic);
+        entry.append(about);
+        $('#info_box').append(entry);
+      }
+      $('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: 'face.jpg'})).appendTo('#a_response');
+    });
+  });
 
 
 });
