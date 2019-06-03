@@ -139,10 +139,16 @@ $(function() {
       let yearPos = years.indexOf(listOfPeople[i]['nastere']- listOfPeople[i]['nastere'] % interval);
       let mgLeft = margin +  (yearPos + (listOfPeople[i]['nastere'] % interval) / interval) * unit;
 
-      let person = $('<p></p>').addClass('person')
-      .css('margin-left', mgLeft+'px')
-      .text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-'+listOfPeople[i]['deces']+')')
-      .appendTo(container);
+      let person;
+      
+      if(listOfPeople[i]['deces'] == 2019) {
+        person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-prezent)').appendTo(container);
+      }
+      else {
+        person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-'+listOfPeople[i]['deces']+')').appendTo(container);
+      
+      }
+
       let arrow = $('<div/>').addClass('arrow').appendTo(person);
       let drop = $('<div/>').addClass('drop').appendTo(arrow);
       $('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: 'face.jpg'})).appendTo(drop);
@@ -243,7 +249,6 @@ $(function() {
 
       yearAxis(years);
       
-
       var pDict = {
         _nume: nume,
         ocupatie: ocup,
@@ -257,6 +262,21 @@ $(function() {
       addTLElements(p_list, years, interval);
       return true;
     } 
+  };
+
+  function extractYears(passed_text) {
+    let re = /(\d{1,2}) (ianuarie|februarie|martie|aprilie|mai|iunie|iulie|august|septembrie|octombrie|noiembrie|decembrie) (\d{4})/ig;
+    let ylist =passed_text.match(re);
+    let birth = ylist[0].split(" ")[2];
+    let death;
+
+    if (ylist.length === 1){
+      death = new Date().getFullYear();
+    }
+    else {
+      death = ylist[1].split(" ")[2];
+    }
+    return [parseInt(birth), parseInt(death)];
   };
 
   $('#add_button').click(function() {
@@ -296,7 +316,7 @@ $(function() {
         let desc = $('<p/>').addClass('entry-desc').text(data[2][i]);
         let about = $('<div/>').addClass('entry-about');
         let pic = $('<img/>').addClass('entry-image');
-        let btn = $('<button type="button" class="btn mini-add" data-container="body" data-toggle="popover" data-placement="right" data-content="Eroare">ADAUGA</button>');
+        let btn = $('<button type="button" class="btn mini-add" id="srcResult_add'+i+'" data-container="body" data-toggle="popover" data-placement="right" data-content="Eroare">ADAUGA</button>');
 
         about.append(title);
         about.append(desc);
@@ -305,6 +325,41 @@ $(function() {
         entry.append(pic);
         entry.append(about);
         $('#info_box').append(entry);
+
+        $('#srcResult_add'+i).click(function() {
+          let interval = parseInt($('#interval').val());
+          let y = extractYears(data[2][i]);
+          let years;
+
+          if(y[0] < min_year){
+            min_year=y[0];
+          }
+    
+          if(y[1] > max_year){
+            max_year=y[1];
+          }
+
+          if(interval === 1){
+            years = range1(min_year, max_year);
+          }
+          else {
+            years = range_int(min_year, max_year, interval);
+          }
+
+          yearAxis(years);
+          
+          var pDict = {
+            _nume: data[1][i],
+            ocupatie: data[4][i],
+            nastere: y[0],
+            deces: y[1],
+            descriere: data[2][i],
+            culoare: "ab2567"
+            };
+
+          p_list.push(pDict);
+          addTLElements(p_list, years, interval);
+        });
       }
       $('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: 'face.jpg'})).appendTo('#a_response');
     });
