@@ -21,43 +21,6 @@ $(function() {
     return yearList;
   }
 
-  function extract_data(dict) {
-    let i=2;
-    let minimum = 3000;
-    let maximum = 0;
-
-    let listOfPeople =[];
-
-    while(dict['A'+i] !=undefined || dict['B'+i] !=undefined || dict['C'+i]!=undefined){
-      
-      let pObj = {}
-
-      pObj['Nume'] = dict['A'+i]['v'];
-      pObj['Nastere'] = dict['B'+i]['v'];
-      pObj['Deces'] = dict['C'+i]['v'];
-      listOfPeople.push(pObj);
-
-      if(dict['B'+i]['v']>maximum)
-        maximum = dict['B'+i]['v'];
-      if(dict['B'+i]['v']<minimum)
-        minimum = dict['B'+i]['v'];
-      if(dict['C'+i]['v']>maximum)
-        maximum = dict['C'+i]['v'];
-      if(dict['C'+i]['v']<minimum)
-        minimum = dict['C'+i]['v'];
-
-      i++;
-    }
-
-    listOfPeople.sort(function(a, b) {
-      return a.Nastere - b.Nastere;
-    });
-
-    let years = range_int(minimum, maximum);
-    yearAxis(years);
-    $( document ).ready(bars(listOfPeople, years)); 
-  }
-
   function yearAxis(yearList){
 
     let container = $('#axis');
@@ -90,43 +53,6 @@ $(function() {
     
   }
 
-  function bars(listOfPeople, yearList) {
-    let container = $('#bar_id');
-    let unit = $('#axis_element').outerWidth() + 4.9188; //width of year-bar element
-    //unit = 39.37;
-    let width = unit * yearList.length; //width of container
-    let margin = unit/2; //add to everything
-    
-    for(let i=0; i<listOfPeople.length; i++) {
-      let span = (listOfPeople[i]['Deces'] - listOfPeople[i]['Nastere']) / 10 * unit //life span in pixels (65 years = 6.5 units => 6.5* unit= pixels)
-      let percentage = span / width * 100; //width of bar in percentage
-      let yearPos = yearList.indexOf(String(listOfPeople[i]['Nastere']- listOfPeople[i]['Nastere']%10));
-  
-      //recalculate margin-left = margin + (indexof year00 in list + what's left)*unit
-      let mgLeft = margin +  (yearPos + (listOfPeople[i]['Nastere']%10)/10) * unit;
-      let mgLeftPc = mgLeft * (100/width);
-
-      let person = $('<p></p>').addClass('person')
-      .css('margin-left', String(mgLeft)+'px')
-      .text(listOfPeople[i]['Nume']+' ('+listOfPeople[i]['Nastere']+'-'+listOfPeople[i]['Deces']+')')
-      .appendTo(container);
-      let arrow = $('<div/>').addClass('arrow').appendTo(person);
-      let drop = $('<div/>').addClass('drop').appendTo(arrow);
-      $('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: listOfPeople[i]['Nume'].split(' ')[1]+'.jpg'})).appendTo(drop);
-      $('<div/>').addClass('line one').text(listOfPeople[i]['Nume']).appendTo(drop);
-      $('<div/>').addClass('line two').text('filozof').appendTo(drop);
-      
-      let bar = $('<hr></hr>').addClass('bars');
-      bar.css('width', String(span) + 'px');
-      bar.css('margin-left', String(mgLeft)+'px');
-      bar.appendTo(container);
-    }
-
-    if ($('#bar_id').height() > $('#axis').height()) {
-      $('.vertical-line').css('height', $('#bar_id').height()+ 10 + 'px');
-    }
-  }
-
   function addTLElements(listOfPeople, years, interval) {
     let container = $('#bar_id');
     container.empty();
@@ -151,9 +77,12 @@ $(function() {
 
       let arrow = $('<div/>').addClass('arrow').appendTo(person);
       let drop = $('<div/>').addClass('drop').appendTo(arrow);
-      $('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: 'face.jpg'})).appendTo(drop);
-      $('<div/>').addClass('line one').text(listOfPeople[i]['_nume']).appendTo(drop);
-      $('<div/>').addClass('line two').text(listOfPeople[i]['ocupatie']).appendTo(drop);
+      let tbox = $('<div/>').addClass('tbox');
+      $('<div/>').addClass('pic').prepend($('<img src="'+listOfPeople[i]['img']+'">').addClass('theImage')).appendTo(drop);
+      $('<div/>').addClass('info-box-title').text(listOfPeople[i]['_nume']).appendTo(tbox);
+      $('<div/>').addClass('info-box-ocupation').text(listOfPeople[i]['ocupatie']).appendTo(tbox);
+      $('<div/>').addClass('info-box-description').text(listOfPeople[i]['descriere']).appendTo(tbox);
+      tbox.appendTo(drop);
         
       let bar = $('<hr></hr>').addClass('bars');
       bar.css('background', listOfPeople[i]['culoare']);
@@ -167,26 +96,6 @@ $(function() {
     }
 
   }
-
-  $.getScript('javascripts/xlsx.full.min.js', function() {
-    console.log('Load performed.');
-  });
-
-  $('#upload_button').click(function() {
-    $('#file_browser').click();
-    $('#file_browser').change(function() {
-      let file = document.getElementById('file_browser').files[0];
-      if (file) {
-          let reader = new FileReader();
-          reader.readAsArrayBuffer(file);
-          reader.onload = function(file) {
-            let data = new Uint8Array(reader.result);
-            let wb = XLSX.read(data,{type:'array'});
-            extract_data(wb['Sheets']['Frâncu']);
-          }
-      }
-    }); 
-  });
 
   function checkYears(start, end, startCheck, endCheck) {
     if(start < end) {
@@ -204,7 +113,7 @@ $(function() {
 
   function validateForm() {
     let interval = parseInt($('#interval').val());
-
+    let imagine = $('#input_imagine').val();
     let nume = $('#input_nume').val();
     let ocup = $('#input_ocupatie').val();
     let colour = $('#colour_box').css('background-color');
@@ -213,7 +122,6 @@ $(function() {
     let end = parseInt($('#year_end').val());
     let endCheck = $('#end_checkbox').is(':checked'); 
     let desc = $('#input_descriere').val();
-
 
     if (!checkYears(start, end, startCheck, endCheck)) {
       console.log('false');
@@ -250,6 +158,7 @@ $(function() {
       yearAxis(years);
       
       var pDict = {
+        img: imagine,
         _nume: nume,
         ocupatie: ocup,
         nastere: start,
@@ -311,20 +220,15 @@ $(function() {
     /* Alerts the results */
     posting.done(function( data ) {
       for (let i = 0; i < data[1].length; i++) {
-        let entry = $('<div/>').addClass('entry');
         let title = $('<p/>').addClass('entry-title').text(data[1][i]);
         let desc = $('<p/>').addClass('entry-desc').text(data[2][i]);
         let about = $('<div/>').addClass('entry-about');
-        let pic = $('<img/>').addClass('entry-image');
         let btn = $('<button type="button" class="btn mini-add" id="srcResult_add'+i+'" data-container="body" data-toggle="popover" data-placement="right" data-content="Eroare">ADAUGA</button>');
 
         about.append(title);
         about.append(desc);
         about.append(btn);
-
-        entry.append(pic);
-        entry.append(about);
-        $('#info_box').append(entry);
+        $('#info_box').append(about);
 
         $('#srcResult_add'+i).click(function() {
           let interval = parseInt($('#interval').val());
@@ -347,21 +251,23 @@ $(function() {
           }
 
           yearAxis(years);
-          
+          console.log(data[5][0]);
           var pDict = {
             _nume: data[1][i],
             ocupatie: data[4][i],
             nastere: y[0],
             deces: y[1],
             descriere: data[2][i],
-            culoare: "ab2567"
+            culoare: "ab2567",
+            img: 'face.jpg'
             };
 
           p_list.push(pDict);
+
           addTLElements(p_list, years, interval);
         });
       }
-      $('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: 'face.jpg'})).appendTo('#a_response');
+      //$('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: 'face.jpg'})).appendTo('#a_response');
     });
   });
 

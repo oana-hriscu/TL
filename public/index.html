@@ -5,6 +5,7 @@
     <script src="javascripts/jquery-3.4.0.js"></script>
     <script src="javascripts/xlsx.full.min.js"></script>
     <script src="javascripts/jscolor.js"></script>
+    <script src="https://unpkg.com/wtf_wikipedia"></script>
     <script src="javascripts/re.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     
@@ -38,6 +39,12 @@
             Adauga element
           </button>
           <div class="dropdown-menu" style="min-width: 20rem;" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-item input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Imagine</span>
+              </div>
+              <input type="text" id="input_imagine" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+            </div>
             <div class="dropdown-item input-group input-group-sm mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Nume</span>
@@ -88,8 +95,6 @@
       </div>
 
       <input class="btn btn-success my-2 my-sm-0" id="reset_button" value='RESET' type="button">
-      <!-- <input type="file" id="file_browser" accept=".xlsx" hidden="hidden">
-      <input class="btn btn-success my-2 my-sm-0" id="upload_button" value='UPLOAD' type="button"> -->
     </nav>
     <div id="inner" class="inner_remaining">
       <div id="axis" class="axis" style='justify-content: space-around;'></div>
