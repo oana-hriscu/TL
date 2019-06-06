@@ -173,19 +173,27 @@ $(function() {
     } 
   };
 
-  function extractYears(passed_text) {
-    let re = /(\d{1,2}) (ianuarie|februarie|martie|aprilie|mai|iunie|iulie|august|septembrie|octombrie|noiembrie|decembrie) (\d{4})/ig;
-    let ylist =passed_text.match(re);
-    let birth = ylist[0].split(" ")[2];
-    let death;
+  function extractYears(json) {
+    // let re = /(\d{1,2}) (ianuarie|februarie|martie|aprilie|mai|iunie|iulie|august|septembrie|octombrie|noiembrie|decembrie) (\d{4})/ig;
+    // let ylist =passed_text.match(re);
+    // let birth = ylist[0].split(" ")[2];
+    // let death;
 
-    if (ylist.length === 1){
-      death = new Date().getFullYear();
+    // if (ylist.length === 1){
+    //   death = new Date().getFullYear();
+    // }
+    // else {
+    //   death = ylist[1].split(" ")[2];
+    // }
+    if(json['born'] != undefined && json['died'] != undefined) {
+      return [parseInt(json['born'].match(/\d{4}/)[0]), parseInt(json['died'].match(/\d{4}/)[0])];
     }
-    else {
-      death = ylist[1].split(" ")[2];
+    if(json['born'] != undefined && json['died'] === undefined) {
+      return [parseInt(json['born'].match(/\d{4}/)[0]), 2019];
     }
-    return [parseInt(birth), parseInt(death)];
+    else return [2010, 2020];
+
+    //return [parseInt(birth), parseInt(death)];
   };
 
   $('#add_button').click(function() {
@@ -220,19 +228,24 @@ $(function() {
     /* Alerts the results */
     posting.done(function( data ) {
       for (let i = 0; i < data[1].length; i++) {
+        let entry = $('<div/>').addClass('entry');
         let title = $('<p/>').addClass('entry-title').text(data[1][i]);
         let desc = $('<p/>').addClass('entry-desc').text(data[2][i]);
         let about = $('<div/>').addClass('entry-about');
+        let pic = $('<img/>').attr('src', data[5][i]).addClass('entry-image');
         let btn = $('<button type="button" class="btn mini-add" id="srcResult_add'+i+'" data-container="body" data-toggle="popover" data-placement="right" data-content="Eroare">ADAUGA</button>');
 
         about.append(title);
         about.append(desc);
         about.append(btn);
-        $('#info_box').append(about);
+
+        entry.append(pic);
+        entry.append(about);
+        $('#info_box').append(entry);
 
         $('#srcResult_add'+i).click(function() {
           let interval = parseInt($('#interval').val());
-          let y = extractYears(data[2][i]);
+          let y = extractYears(data[6][i]);
           let years;
 
           if(y[0] < min_year){
@@ -251,7 +264,6 @@ $(function() {
           }
 
           yearAxis(years);
-          console.log(data[5][0]);
           var pDict = {
             _nume: data[1][i],
             ocupatie: data[4][i],
@@ -259,11 +271,10 @@ $(function() {
             deces: y[1],
             descriere: data[2][i],
             culoare: "ab2567",
-            img: 'face.jpg'
+            img: data[5][i]
             };
 
           p_list.push(pDict);
-
           addTLElements(p_list, years, interval);
         });
       }
@@ -273,3 +284,4 @@ $(function() {
 
 
 });
+

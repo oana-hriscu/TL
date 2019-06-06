@@ -24,7 +24,6 @@
     "pug": "^2.0.3",
     "request": "^2.88.0",
     "wikijs": "^5.2.1",
-    "wikipediajs": "^1.4.0",
     "wtf_wikipedia": "^7.3.0"
   },
   "devDependencies": {

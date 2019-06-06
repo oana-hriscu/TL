@@ -8,7 +8,8 @@ const nlp = require('compromise');
 const app = express();
 let wtf = require('wtf_wikipedia');
 
-let ocup = ["artist", "artistă", "pictor", "rege", "regele", "președinte", "președintele", "președinta", "politician", "om politic", "președintă", "regina", "regină", "cântăreață", "cântăreț", "pictoriță", "economist", "economistă", "afacerist", "afaceristă", "om de știință", "autor", "autoare", "scriitor", "scriitoare", "lingvist", "lingvistă", "filozof", "filosof", "filosoafă", "filozoafă", "actor", "actriță", "poet", "poetă", "grup", "trupă", "matematician", "matematiciană", "astronom", "astronomă"];
+
+let ocup = ["artist", "artistă", "pictor", "rege", "regele", "astronaut", "pilot", "compozitor", "compozitoare", "muzician", "muziciană", "președinte", "președintele", "președinta", "politician", "om politic", "președintă", "regina", "regină", "cântăreață", "cântăreț", "pictoriță", "economist", "economistă", "afacerist", "afaceristă", "om de știință", "autor", "autoare", "scriitor", "scriitoare", "lingvist", "lingvistă", "filozof", "filosof", "filosoafă", "filozoafă", "actor", "actriță", "poet", "poetă", "grup", "trupă", "matematician", "matematiciană", "astronom", "astronomă"];
 
 let wiki_search = 'https://ro.wikipedia.org/w/api.php?action=opensearch&format=json&search='; 
 let wiki_content = 'https://ro.wikipedia.org/w/api.php?action=query&format=json&prop=revisions&rvprop=content&rvsection=0&titles=';
@@ -36,16 +37,9 @@ function occupations(short_text) {
     return 0;
 }
 
-function years(text, sr){
-    let re = /\d{4}/;
-    sr.push(text.match(re)[0]);
-    return text.match(re);
-}
-
 function refineList(res_list) {
     let i = 0
     while(i < res_list[2].length) {
-        
         let res = nlp(res_list[2][i]).people().out('text');
         
         if(res.length === 0) {
@@ -98,21 +92,37 @@ app.post('/', function(req, res) {
         if(!error && response.statusCode == 200) {
             let $ = cheerio.load(html);
             const search_result = JSON.parse($('body').html().replace(/&quot;/g,'"'));
+
             search_result.push.apply(search_result, [[]]);
             search_result.push.apply(search_result, [[]]);
+            search_result.push.apply(search_result, [[]]);
+
             refineList(search_result);
 
-            wtf.fetch(search_result[1], 'ro').then((docList) => {
+            for(let i=0; i<search_result[1].length; i++) {
+                search_result[5].push('face.jpg');
+                search_result[6].push({});
+            }
+
+            wtf.fetch(search_result[1]).then((docList) => {
                 let infoboxes = docList.map(doc => {
+                    let obj = {};
                     
-                    console.log(years(doc.text(), search_result[5]));
-                  return {
-                    img: doc.images(0),
-                    title: doc.title(),
-                    infobox: doc.infoboxes(0)
-                  }
+                    if (!doc.infobox(0)) {
+                        console.log(doc.title() + ' - no infobox');
+                    } else {
+                        obj = doc.infobox(0).keyValue();
+                    }
+                    console.log(doc.images(0).json());
+                    search_result[5][search_result[1].indexOf(doc.title())] = String(doc.images(0).json()['thumb']);
+                    search_result[6][search_result[1].indexOf(doc.title())] = {born: obj.born || obj.birth_date, died: obj.died || obj.death_date};
+
+                    return {
+                        name: doc.title() || obj.name
+                    }
                 });
-                console.log(infoboxes);
+
+                //console.log(infoboxes);
                 console.log(search_result);
                 res.send(search_result);
             });
