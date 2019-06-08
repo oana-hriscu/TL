@@ -72,10 +72,21 @@ justify-content: space-around;
 padding: 1rem;
 }
 
+.nothing-found {
+  text-align: center;
+}
+
+.shrug{
+  width: 50px;
+}
+
 .entry {
-display: flex;
-flex-direction: row; 
-justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: darkgray;
+  border-bottom-style: solid;
+  border-bottom-width: thin;
 }
 
 .entry-title{
@@ -96,9 +107,9 @@ color: red;
 
 .entry-about{
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: space-between;
-  padding: 5px;
+  padding: 10px;
   width: 75%;
 }
 
@@ -211,11 +222,22 @@ text-align: center;
 }
 
 .bars {
-  height: 4px;
+  height: 5px;
   background: #53478d;
   margin-top: 0;
+  display: flex;
   margin-bottom: 0;
+  border: 0;
   border-radius: 25px;
+}
+
+.event-overlap {
+  margin: 0;
+  border: 0;
+  border-radius: 30px;
+  height: inherit;
+  width: 5px;
+  background: yellow;
 }
 
 .person {
@@ -315,6 +337,7 @@ p {
 /*On-Hover Animation*/
 .person:hover .tbox{
   background: #96969654;
+  width: inherit;
   border-radius: 0px 5px 5px 5px;
 }
 

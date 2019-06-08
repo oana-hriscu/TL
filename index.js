@@ -9,7 +9,9 @@ const app = express();
 let wtf = require('wtf_wikipedia');
 
 
-let ocup = ["artist", "artistă", "pictor", "rege", "regele", "astronaut", "pilot", "compozitor", "compozitoare", "muzician", "muziciană", "președinte", "președintele", "președinta", "politician", "om politic", "președintă", "regina", "regină", "cântăreață", "cântăreț", "pictoriță", "economist", "economistă", "afacerist", "afaceristă", "om de știință", "autor", "autoare", "scriitor", "scriitoare", "lingvist", "lingvistă", "filozof", "filosof", "filosoafă", "filozoafă", "actor", "actriță", "poet", "poetă", "grup", "trupă", "matematician", "matematiciană", "astronom", "astronomă"];
+// let ocup = ["artist", "pictor", "rege", "astronaut", "antreprenor", "antreprenoare", "fratele", "sora", "pilot", "compozitor", "compozitoare", "muzician", "președinte", "președinta", "politician", "om politic", "regina", "regină", "cântăreață", "cântăreț", "economist", "afacerist", "om de știință", "autor", "autoare", "scriitor", "scriitoare", "lingvist", "filozof", "filosof", "filosoafă", "filozoafă", "actor", "actriță", "poet", "grup", "trupă", "matematician", "astronom", "mama", "tata", "mamă", "tată"];
+let entryType = ["oraș", "magazin", "casă de", " sat ", "un județ", "un prenume"];
+
 
 let wiki_search = 'https://ro.wikipedia.org/w/api.php?action=opensearch&format=json&search='; 
 let wiki_content = 'https://ro.wikipedia.org/w/api.php?action=query&format=json&prop=revisions&rvprop=content&rvsection=0&titles=';
@@ -28,10 +30,10 @@ var options = {
     path: '/index.html'
 };
 
-function occupations(short_text) {
-    for(let i=0; i<ocup.length; i++){
-        if(short_text.includes(ocup[i])){
-            return ocup[i];
+function entry_type(short_text) {
+    for(let i=0; i<entryType.length; i++){
+        if(short_text.includes(entryType[i])){
+            return entryType[i];
         }
     }
     return 0;
@@ -48,12 +50,11 @@ function refineList(res_list) {
             res_list[3].splice(i, 1);
         }
         else {
-            let occ = occupations(res_list[2][i]);
-            let query = res_list[1][i];
-            if(occ === 0) {
-            res_list[1].splice(i, 1);
-            res_list[2].splice(i, 1);
-            res_list[3].splice(i, 1);
+            let occ = entry_type(res_list[2][i]);
+            if(occ != 0) {
+                res_list[1].splice(i, 1);
+                res_list[2].splice(i, 1);
+                res_list[3].splice(i, 1);
             }
             else {
                 res_list[4].push(occ);
@@ -63,27 +64,6 @@ function refineList(res_list) {
     }
 }
 
-// function imageExtract(search_result, callback) {
-//     let photolist = [];
-//     for(let i = 0 ; i < search_result[3].length; i++) {
-//         request(search_result[3][i], (error, response, html) => {
-//             if(!error && response.statusCode == 200) {
-//                 let $ = cheerio.load(html);
-//                 let content_result = $('.infocaseta').find('tbody').html();
-//                 let jay = html2json(content_result);
-//                 let strJay = JSON.stringify(jay);
-//                 let image = strJay.match(/"src":"(.*?)"/i)[1];
-//                 //console.log(image);
-//                 //photolist.push(image);
-//                 return callback(image, false);
-//             }
-//             else {
-//                 return callback(null, error);
-//             }
-//         })
-//     }
-//     return photolist;
-// }
 
 app.post('/', function(req, res) {
     let search = req.body.name;
@@ -92,40 +72,77 @@ app.post('/', function(req, res) {
         if(!error && response.statusCode == 200) {
             let $ = cheerio.load(html);
             const search_result = JSON.parse($('body').html().replace(/&quot;/g,'"'));
-
-            search_result.push.apply(search_result, [[]]);
-            search_result.push.apply(search_result, [[]]);
-            search_result.push.apply(search_result, [[]]);
-
-            refineList(search_result);
-
-            for(let i=0; i<search_result[1].length; i++) {
-                search_result[5].push('face.jpg');
-                search_result[6].push({});
-            }
-
-            wtf.fetch(search_result[1]).then((docList) => {
-                let infoboxes = docList.map(doc => {
-                    let obj = {};
-                    
-                    if (!doc.infobox(0)) {
-                        console.log(doc.title() + ' - no infobox');
-                    } else {
-                        obj = doc.infobox(0).keyValue();
-                    }
-                    console.log(doc.images(0).json());
-                    search_result[5][search_result[1].indexOf(doc.title())] = String(doc.images(0).json()['thumb']);
-                    search_result[6][search_result[1].indexOf(doc.title())] = {born: obj.born || obj.birth_date, died: obj.died || obj.death_date};
-
-                    return {
-                        name: doc.title() || obj.name
-                    }
-                });
-
-                //console.log(infoboxes);
-                console.log(search_result);
+            
+            if (search_result[1].length === 0) {
                 res.send(search_result);
-            });
+            }
+            else {
+                search_result.push.apply(search_result, [[]]);
+                search_result.push.apply(search_result, [[]]);
+                search_result.push.apply(search_result, [[]]);
+
+                refineList(search_result);
+
+                for(let i=0; i<search_result[1].length; i++) {
+                    search_result[5].push('face.jpg');
+                    search_result[6].push({});
+                }
+
+                if(search_result[1].length < 2) {
+                    wtf.fetch(search_result[1][0], 'en', function(err, doc) {
+                        let obj = {};
+                            
+                        if (!doc.infobox(0)) {
+                            console.log(doc.title() + ' - no infobox');
+                        } else {
+                            obj = doc.infobox(0).keyValue();
+                            if(!doc.images(0).json()){
+                                console.log('no image');
+                            }
+                            else {
+                                search_result[5][search_result[1].indexOf(doc.title())] = String(doc.images(0).json()['thumb']);
+                            }
+
+                            search_result[6][search_result[1].indexOf(doc.title())] = {born: obj.data_nașterii || obj.birth_date, died: obj.data_decesului || obj.death_date};
+                            console.log(search_result);
+                            res.send(search_result);
+                        }
+                    });
+
+                }
+                else {
+                    wtf.fetch(search_result[1], 'en').then((docList) => {
+                        let infoboxes = docList.map(doc => {
+                            let obj = {};
+                            
+                            if (!doc.infobox(0)) {
+                                console.log(doc.title() + ' - no infobox');
+                                return {};
+                            } else {
+                                obj = doc.infobox(0).keyValue();
+                                if(!doc.images(0)){
+                                    console.log('no image');
+                                }
+                                else {
+                                    search_result[5][search_result[1].indexOf(doc.title())] = String(doc.images(0).json()['thumb']);
+                                }
+
+                                search_result[4][search_result[1].indexOf(doc.title())] = doc.infobox(0)['_type'];
+                                search_result[6][search_result[1].indexOf(doc.title())] = {born: obj.born || obj.birth_date, died: obj.died || obj.death_date};
+        
+                                return {
+                                    name: doc.title() || obj.name
+                                }
+                            }
+                        });
+        
+                        //console.log(infoboxes);
+                        console.log(search_result);
+                        res.send(search_result);
+                    });
+                }
+            }
+            
         }
         else {
             res.send("Nu s-a putut gasi nimic");
@@ -133,4 +150,85 @@ app.post('/', function(req, res) {
     });
 });
 
+function checkDups(info, entry_list) {
+    for(let i=entry_list.length-1; i>0;i--) {
+        if(info === entry_list[i]['description'])
+            return false;
+    }
+    return true;
+}
 
+function validateInfo(info, date, birth, death) {
+
+    if(date <= birth || date > death){
+        return false;
+    }
+
+    if(info.indexOf(')') != -1 && info.indexOf('(') === -1) {
+        return false
+    }
+
+    if(info.length<20){
+        return false;
+    }
+
+    if(info.indexOf('ISBN') != -1){
+        return false;
+    }
+
+    if(info.indexOf('*') != -1){
+        return false;
+    }
+
+    return true;
+    
+}
+
+
+app.get('/something', function (req, res) {
+    let search = req.query.term;
+    let birth = req.query.birth;
+    let death = req.query.death;
+
+    wtf.fetch(search, 'ro', function(err, doc) {
+        let document = doc.text();
+        let event = /(\d{1,2}) (ianuarie|februarie|martie|aprilie|mai|iunie|iulie|august|septembrie|octombrie|noiembrie|decembrie) (\d{4})|(\d{4})/gi;
+        let eventList = [];
+
+        while (match = event.exec(document)) {
+            let start = match.index;
+            let end = event.lastIndex;
+            let date;
+
+            if(match[3] === undefined) {
+                date = parseInt(match[4]);
+            }
+            else date = parseInt(match[3]);
+        
+            let after = document.substring(end, end+500);
+            let before = document.substring(start - 500, start);
+
+            let entry = before.substring(before.lastIndexOf('.')+1) + match[0] + after.substring(0, after.indexOf('.'));
+            entry = entry.replace(/\n/g, '');
+            entry = entry.replace(/^\s+|\s+$/g, '');
+
+            if(checkDups(entry, eventList) && validateInfo(entry, date, birth, death)) {
+                eventList.push({year: date, description: entry});
+            } 
+        }
+        
+        eventList.sort(function(a, b){
+            var keyA = a.year,
+                keyB = b.year;
+            // Compare the 2 dates
+            if(keyA < keyB) return -1;
+            if(keyA > keyB) return 1;
+            return 0;
+        });
+        console.log(eventList);
+        res.send(eventList);
+    });
+    
+})
+
+//list pt evenimentele care au loc in acelasi ani
