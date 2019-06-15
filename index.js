@@ -8,9 +8,7 @@ const nlp = require('compromise');
 const app = express();
 let wtf = require('wtf_wikipedia');
 
-
-// let ocup = ["artist", "pictor", "rege", "astronaut", "antreprenor", "antreprenoare", "fratele", "sora", "pilot", "compozitor", "compozitoare", "muzician", "președinte", "președinta", "politician", "om politic", "regina", "regină", "cântăreață", "cântăreț", "economist", "afacerist", "om de știință", "autor", "autoare", "scriitor", "scriitoare", "lingvist", "filozof", "filosof", "filosoafă", "filozoafă", "actor", "actriță", "poet", "grup", "trupă", "matematician", "astronom", "mama", "tata", "mamă", "tată"];
-let entryType = ["oraș", "magazin", "casă de", " sat ", "un județ", "un prenume"];
+let entryType = ["oraș", "magazin", "casă de", " sat ", "un județ", "un prenume", "se poate referi la", "este un nume", "este capitala"];
 
 
 let wiki_search = 'https://ro.wikipedia.org/w/api.php?action=opensearch&format=json&search='; 
@@ -150,7 +148,16 @@ app.post('/', function(req, res) {
     });
 });
 
-function checkDups(info, entry_list) {
+function yearDups(date, entry_list) {
+    for(let i=entry_list.length-1; i>0;i--) {
+        if(date === entry_list[i]['year']) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function descDups(info, entry_list) {
     for(let i=entry_list.length-1; i>0;i--) {
         if(info === entry_list[i]['description'])
             return false;
@@ -168,6 +175,18 @@ function validateInfo(info, date, birth, death) {
         return false
     }
 
+    if(info.indexOf(')') != -1 && info.indexOf('(') != -1 && info.indexOf(')') < info.indexOf('(')) {
+        return false
+    }
+
+    if (info[0] >= '0' && info[0] <= '9') {
+        return false;
+    }
+
+    if (info[0] === ',') {
+        return false;
+    }
+
     if(info.length<20){
         return false;
     }
@@ -177,6 +196,10 @@ function validateInfo(info, date, birth, death) {
     }
 
     if(info.indexOf('*') != -1){
+        return false;
+    }
+
+    if(info.indexOf('|') != -1){
         return false;
     }
 
@@ -201,9 +224,9 @@ app.get('/something', function (req, res) {
             let date;
 
             if(match[3] === undefined) {
-                date = parseInt(match[4]);
+                date = match[4];
             }
-            else date = parseInt(match[3]);
+            else date = match[3];
         
             let after = document.substring(end, end+500);
             let before = document.substring(start - 500, start);
@@ -212,9 +235,15 @@ app.get('/something', function (req, res) {
             entry = entry.replace(/\n/g, '');
             entry = entry.replace(/^\s+|\s+$/g, '');
 
-            if(checkDups(entry, eventList) && validateInfo(entry, date, birth, death)) {
-                eventList.push({year: date, description: entry});
-            } 
+            if(validateInfo(entry, date, birth, death)) {
+                let yearDuplicate = yearDups(date, eventList);
+                if (yearDuplicate!= -1) {
+                    eventList[yearDuplicate]['description'].push(entry);
+                }
+                else if(descDups(entry, eventList)) {
+                    eventList.push({year: date, description: [entry]});
+                }
+            }
         }
         
         eventList.sort(function(a, b){

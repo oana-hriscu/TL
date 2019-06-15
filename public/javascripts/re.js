@@ -3,6 +3,7 @@ $(function() {
   let min_year=5000;
   let max_year=-5000;
 
+  let eventByPerson = {};
   let p_list = [];
 
   function range_int(start, end, interval) {
@@ -55,14 +56,20 @@ $(function() {
 
   function addEvents(bar, unit, birth, eventList){
     let prev = birth;
-    for(let i=0;i<eventList.length; i++) {
+    for(let i=0; i < eventList.length; i++) {
       let mg = eventList[i]['year'] - prev;
       let aux = $('<hr/>').addClass('event-overlap').css('margin-left', (mg*unit - unit/2)+'px').appendTo(bar);
+      let arrow = $('<div/>').addClass('arrow').appendTo(aux);
+      let evDrop = $('<div/>').addClass('event-drop').appendTo(arrow);
+      for(let j=0; j < eventList[i]['description'].length; j++) {
+        $('<p>').addClass('event-text').text(eventList[i]['description'][j]).appendTo(evDrop);
+      }
+
       prev = eventList[i]['year'];
     }
   }
 
-  function addTLElements(listOfPeople, years, interval, eventList) {
+  function addTLElements(listOfPeople, years, interval, eventByPerson) {
     let container = $('#bar_id');
     container.empty();
     let margin = $('.vertical-line').offset()['left']+0.5; //add to everything
@@ -101,7 +108,7 @@ $(function() {
 
       // let aux1 = $('<hr/>').addClass('event-overlap').appendTo(bar);
       // let aux2 = $('<hr/>').addClass('event-overlap').appendTo(bar);
-      addEvents(bar, span/(listOfPeople[i]['deces'] - listOfPeople[i]['nastere']), listOfPeople[i]['nastere'], eventList);
+      addEvents(bar, span/(listOfPeople[i]['deces'] - listOfPeople[i]['nastere']), listOfPeople[i]['nastere'], eventByPerson[listOfPeople[i]['_nume']]);
       bar.appendTo(container);
 
     }
@@ -236,9 +243,10 @@ $(function() {
     $('#axis').empty();
     $('#bar_id').empty();
     $('#interval').attr('disabled', false);
-    min_year=5000;
-    max_year=-5000;
-    p_list.length=0;
+    min_year = 5000;
+    max_year = -5000;
+    p_list.length = 0;
+    eventByPerson.length = 0;
   });
 
   $(document).on('click', 'div.dropdown div.dropdown-menu', function (e) {
@@ -282,7 +290,7 @@ $(function() {
           entry.append(about);
           $('#info_box').append(entry);
 
-          $('#srcResult_add'+i).click(function() {
+          $('#srcResult_add'+i).click(function() { //add functionality for each button
             $('#interval').attr('disabled', true);
             
             let interval = parseInt($('#interval').val());
@@ -319,15 +327,16 @@ $(function() {
             
             let getting = $.get( '/something', { term: data[1][i], birth: y[0], death: y[1]});
             
-            getting.done(function( data ) {
-              addTLElements(p_list, years, interval, data);
+            getting.done(function( theList ) {
+              eventByPerson[data[1][i]] = theList;
+              console.log(eventByPerson);
+              addTLElements(p_list, years, interval, eventByPerson);
             });
             
           });
         }
 
     }
-      //$('<div/>').addClass('pic').prepend($('<img>',{class:'theImage',src: 'face.jpg'})).appendTo('#a_response');
     });
   });
 

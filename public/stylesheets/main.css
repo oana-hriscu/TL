@@ -89,6 +89,10 @@ padding: 1rem;
   border-bottom-width: thin;
 }
 
+.entry:last-child {
+  border-bottom: none;
+}
+
 .entry-title{
 color: red;
 }
@@ -237,7 +241,11 @@ text-align: center;
   border-radius: 30px;
   height: inherit;
   width: 5px;
-  background: yellow;
+  background: ivory;
+}
+
+.event-text{
+  visibility: hidden;
 }
 
 .person {
@@ -277,6 +285,18 @@ p {
 }
 
 .drop{
+  position:absolute;
+  content:"";
+  margin-top:20px;
+  margin-left:60px;
+  margin-top:55px;
+  width:0px;
+  height:0px;
+  border-radius:0px;
+  box-shadow:0px 0px 0px black;
+}
+
+.event-drop{
   position:absolute;
   content:"";
   margin-top:20px;
@@ -369,6 +389,29 @@ p {
   margin-left:-40px;
   border-radius:5px;
   box-shadow:1px 1px 10px black;
+}
+
+.event-overlap:hover .event-drop{
+  position:absolute;
+  background:white;
+  width:350px;
+  height: fit-content;
+  padding: 0.5rem;
+  margin-top:10px;
+  margin-left:-40px;
+  border-radius:5px;
+  box-shadow:1px 1px 10px black;
+}
+
+.event-overlap:hover .event-text{
+  visibility: visible;
+  padding: .5rem;
+  border-bottom-style: groove;
+}
+
+
+.event-overlap:hover .event-text:last-child{
+  border-bottom: none;
 }
 
 .person:hover .pic {
