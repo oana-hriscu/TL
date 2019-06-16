@@ -99,18 +99,23 @@ $(function() {
       $('<div/>').addClass('info-box-title').text(listOfPeople[i]['_nume']).appendTo(tbox);
       $('<div/>').addClass('info-box-ocupation').text(listOfPeople[i]['ocupatie']).appendTo(tbox);
       $('<div/>').addClass('info-box-description').text(listOfPeople[i]['descriere']).appendTo(tbox);
+
       tbox.appendTo(drop);
+
+      let editable = $('<div/>').addClass('editMenu');
+      $('<i class="fa fa-trash"></i>').appendTo(editable);
+      editable.appendTo(drop);
         
       let bar = $('<hr></hr>').addClass('bars');
       bar.css('background', listOfPeople[i]['culoare']);
       bar.css('width', String(span) + 'px');
       bar.css('margin-left', String(mgLeft)+'px');
 
-      // let aux1 = $('<hr/>').addClass('event-overlap').appendTo(bar);
-      // let aux2 = $('<hr/>').addClass('event-overlap').appendTo(bar);
-      addEvents(bar, span/(listOfPeople[i]['deces'] - listOfPeople[i]['nastere']), listOfPeople[i]['nastere'], eventByPerson[listOfPeople[i]['_nume']]);
-      bar.appendTo(container);
+      if(jQuery.isEmptyObject(eventByPerson) === false){
+        addEvents(bar, span/(listOfPeople[i]['deces'] - listOfPeople[i]['nastere']), listOfPeople[i]['nastere'], eventByPerson[listOfPeople[i]['_nume']]);
+      }
 
+      bar.appendTo(container);
     }
 
     if ($('#bar_id').height() > $('#axis').height()) {
@@ -150,7 +155,7 @@ $(function() {
       return false;
     }
 
-    if(nume=='' || ocup=='' || start=='' || end=='' || desc=='' ) {
+    if(nume=='' || ocup=='' || start=='' || end=='') {
       return false;
     }
     else {
@@ -178,8 +183,12 @@ $(function() {
       }
 
       yearAxis(years);
+
+      if(imagine == '') {
+        imagine = "face.jpg";
+      }
       
-      var pDict = {
+      let pDict = {
         img: imagine,
         _nume: nume,
         ocupatie: ocup,
@@ -191,6 +200,8 @@ $(function() {
 
       p_list.push(pDict);
       addTLElements(p_list, years, interval, []);
+      addToHistory(pDict);
+
       return true;
     } 
   };
@@ -231,6 +242,20 @@ $(function() {
 
     //return [parseInt(birth), parseInt(death)];
   };
+
+  function addToHistory(pDict) {
+    let history = $('#history');
+    let entry = $('<div/>').addClass('entry');;
+    let about = $('<div/>').addClass('entry-about');
+    let pic = $('<img/>').attr('src', pDict['img']).addClass('entry-image');
+
+    let title = $('<p/>').addClass('entry-title').text(pDict['_nume']);
+    title.appendTo(about);
+
+    pic.appendTo(entry);
+    about.appendTo(entry);
+    entry.appendTo(history);
+  }
 
   $('#add_button').click(function() {
     if (validateForm()) {
@@ -313,7 +338,7 @@ $(function() {
             }
 
             yearAxis(years);
-            var pDict = {
+            let pDict = {
               _nume: data[1][i],
               ocupatie: data[4][i],
               nastere: y[0],
@@ -331,6 +356,8 @@ $(function() {
               eventByPerson[data[1][i]] = theList;
               console.log(eventByPerson);
               addTLElements(p_list, years, interval, eventByPerson);
+
+              addToHistory(pDict);
             });
             
           });
@@ -339,7 +366,6 @@ $(function() {
     }
     });
   });
-
 
 });
 

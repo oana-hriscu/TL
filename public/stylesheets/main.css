@@ -352,6 +352,11 @@ p {
   margin-left:60px;
 }
 
+.fa{
+  visibility: hidden;
+  text-shadow: none;
+}
+
 /*End Notification Info-Box outer frame*/
 
 /*On-Hover Animation*/
@@ -359,6 +364,11 @@ p {
   background: #96969654;
   width: inherit;
   border-radius: 0px 5px 5px 5px;
+}
+
+.person:hover .editMenu{
+  text-align: center;
+  width: 1rem;
 }
 
 .person:hover{
@@ -389,6 +399,10 @@ p {
   margin-left:-40px;
   border-radius:5px;
   box-shadow:1px 1px 10px black;
+}
+
+.person:hover .fa{
+  visibility: visible;
 }
 
 .event-overlap:hover .event-drop{
@@ -441,4 +455,11 @@ p {
 
 .person:hover .info-box-description{
   visibility: visible;
+}
+
+.card {
+  position: absolute;
+  z-index: 500;
+  width: 30%;
+  right: 0;
 }
