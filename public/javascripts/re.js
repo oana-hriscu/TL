@@ -70,27 +70,38 @@ $(function() {
   }
 
   function addTLElements(listOfPeople, years, interval, eventByPerson) {
+    listOfPeople.sort((a,b) => (a.nastere < b.nastere) ? -1 : ((b.nastere < a.nastere) ? 1 : 0));
+
     let container = $('#bar_id');
     container.empty();
     let margin = $('.vertical-line').offset()['left']+0.5; //add to everything
     let unit = margin *2; //width of year-bar element
     //let width = unit * years.length; //width of container
-    
     for(let i=0; i<listOfPeople.length; i++) {
-      
-      let span = (listOfPeople[i]['deces'] - listOfPeople[i]['nastere']) / interval * unit //life span in pixels (65 years = 6.5 units => 6.5* unit= pixels)
-      let yearPos = years.indexOf(listOfPeople[i]['nastere']- listOfPeople[i]['nastere'] % interval);
-      let mgLeft = margin +  (yearPos + (listOfPeople[i]['nastere'] % interval) / interval) * unit;
+      let span;
 
-      let person;
-      
-      if(listOfPeople[i]['deces'] == 2019) {
-        person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-prezent)').appendTo(container);
+      if(listOfPeople[i]['deces'] - listOfPeople[i]['nastere'] === 0){
+        span = unit/interval;
       }
       else {
-        person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-'+listOfPeople[i]['deces']+')').appendTo(container);
-      
+        span = (listOfPeople[i]['deces'] - listOfPeople[i]['nastere']) / interval * unit //life span in pixels (65 years = 6.5 units => 6.5* unit= pixels)\
       }
+
+      let yearPos = years.indexOf(listOfPeople[i]['nastere']- listOfPeople[i]['nastere'] % interval);
+      let mgLeft = margin +  (yearPos + (listOfPeople[i]['nastere'] % interval) / interval) * unit;
+      let auxDiv = $('<div id="parent"/>');
+      let person;
+      
+      if(listOfPeople[i]['nastere'] === listOfPeople[i]['deces']) {
+        person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+')').appendTo(auxDiv);
+      }
+      else if(listOfPeople[i]['deces'] === 2019) {
+        person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-prezent)').appendTo(auxDiv);
+      }
+      else {
+        person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-'+listOfPeople[i]['deces']+')').appendTo(auxDiv);
+      }
+
 
       let arrow = $('<div/>').addClass('arrow').appendTo(person);
       let drop = $('<div/>').addClass('drop').appendTo(arrow);
@@ -103,7 +114,16 @@ $(function() {
       tbox.appendTo(drop);
 
       let editable = $('<div/>').addClass('editMenu');
-      $('<i class="fa fa-trash"></i>').appendTo(editable);
+      let trash = $('<i class="fa fa-trash" id="trash"></i>');
+
+      trash.click(function () {
+        console.log(listOfPeople[i]);
+        $(this).closest('#parent').remove();
+        listOfPeople.splice(i, 1);
+        console.log(listOfPeople);
+      });
+
+      trash.appendTo(editable);
       editable.appendTo(drop);
         
       let bar = $('<hr></hr>').addClass('bars');
@@ -111,11 +131,13 @@ $(function() {
       bar.css('width', String(span) + 'px');
       bar.css('margin-left', String(mgLeft)+'px');
 
-      if(jQuery.isEmptyObject(eventByPerson) === false){
+      if(eventByPerson[listOfPeople[i]['_nume']] !== undefined){
         addEvents(bar, span/(listOfPeople[i]['deces'] - listOfPeople[i]['nastere']), listOfPeople[i]['nastere'], eventByPerson[listOfPeople[i]['_nume']]);
       }
 
-      bar.appendTo(container);
+      bar.appendTo(auxDiv);
+
+      auxDiv.appendTo(container);
     }
 
     if ($('#bar_id').height() > $('#axis').height()) {
@@ -199,12 +221,19 @@ $(function() {
         };
 
       p_list.push(pDict);
-      addTLElements(p_list, years, interval, []);
-      addToHistory(pDict);
+      addTLElements(p_list, years, interval, eventByPerson);
+      addToHistory(pDict, years, interval, eventByPerson);
 
       return true;
     } 
   };
+
+  $('#add_button').click(function() {
+    if (validateForm()) {
+      $(this).parents('.dropdown').find('button.dropdown-toggle').dropdown('toggle')
+      $('#interval').attr('disabled', true);
+    }
+  });
 
   function extractYears(json, passed_text) {
     if(json['born'] != undefined && json['died'] != undefined) {
@@ -243,26 +272,27 @@ $(function() {
     //return [parseInt(birth), parseInt(death)];
   };
 
-  function addToHistory(pDict) {
+  function addToHistory(pDict, years, interval, eventByPerson) {
     let history = $('#history');
     let entry = $('<div/>').addClass('entry');;
-    let about = $('<div/>').addClass('entry-about');
+    let about = $('<div/>').addClass('entry-about').attr('style', 'justify-content: space-evenly');
     let pic = $('<img/>').attr('src', pDict['img']).addClass('entry-image');
 
-    let title = $('<p/>').addClass('entry-title').text(pDict['_nume']);
+    let title = $('<p/>').addClass('entry-title').text(pDict['_nume'] +' ('+pDict['nastere']+'-'+pDict['deces']+')');
     title.appendTo(about);
+
+    let btn = $('<button type="button" class="btn mini-add" id="history_add" data-container="body">ADAUGA</button>');
+    btn.appendTo(about);
 
     pic.appendTo(entry);
     about.appendTo(entry);
-    entry.appendTo(history);
-  }
 
-  $('#add_button').click(function() {
-    if (validateForm()) {
-      $(this).parents('.dropdown').find('button.dropdown-toggle').dropdown('toggle')
-      $('#interval').attr('disabled', true);
-    }
-  });
+    entry.appendTo(history);
+    btn.click(function () {
+      p_list.push(pDict);
+      addTLElements(p_list, years, interval, eventByPerson);
+    });
+  }
 
   $('#reset_button').click(function() {
     $('#axis').empty();
@@ -291,7 +321,7 @@ $(function() {
     posting.done(function( data ) {
       if (data[1].length === 0) {
         let nfdiv = $('<div/>').addClass('nothing-found');
-        let not_found = $('<p style="font-size: 100%;" />').text('Nu am gasit nimic :(');
+        let not_found = $('<p style="font-size: 100%;" />').text('Nu am gasit nimic 😞');
         let shrug = $('<img/>').attr('src', 'shrug.png').addClass('shrug');
         $(nfdiv).append(not_found);
         $(nfdiv).append(shrug);
@@ -354,10 +384,8 @@ $(function() {
             
             getting.done(function( theList ) {
               eventByPerson[data[1][i]] = theList;
-              console.log(eventByPerson);
               addTLElements(p_list, years, interval, eventByPerson);
-
-              addToHistory(pDict);
+              addToHistory(pDict, years, interval, eventByPerson);
             });
             
           });
@@ -367,5 +395,20 @@ $(function() {
     });
   });
 
-});
+  $('#historyTL_button').click(function () {
+    $('#axis').css({"align-items": ""}).empty();
+    $('#dropdownMenuButton').attr('disabled', false);
+    $('#interval').attr('disabled', false);
+    $('#search_bar').attr('disabled', false);
+    $('#submit_button').attr('disabled', false);
+    $('#history_button').attr('disabled', false);
+    $('#reset_button').attr('disabled', false);
+  })
 
+  $('#socialTL_button').click(function () {
+    $('#axis').css({"align-items": ""}).empty();
+    $('#dropdownMenuButton').attr('disabled', false);
+    $('#history_button').attr('disabled', false);
+    $('#reset_button').attr('disabled', false);
+  })
+});

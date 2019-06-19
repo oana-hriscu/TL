@@ -206,8 +206,8 @@ padding-bottom: 0.5rem;
 }
 
 .axis-element{
-width: 2.5rem;
-flex-shrink: 0;
+  width: 2.5rem;
+  flex-shrink: 0;
 }
 
 .axis-year{
@@ -276,12 +276,6 @@ p {
 .arrow{
   position:absolute;
   content:"";
-  margin-top:10px;
-  margin-left:10px;
-  border-left:10px solid transparent;
-  border-right:10px solid transparent;
-  border-bottom:10px solid transparent;
-  margin-top:5px;
 }
 
 .drop{
@@ -368,7 +362,7 @@ p {
 
 .person:hover .editMenu{
   text-align: center;
-  width: 1rem;
+  width: 2rem;
 }
 
 .person:hover{
@@ -377,14 +371,14 @@ p {
 }
 
 .person:hover .arrow{
-  position:absolute;
-  width:0px;
-  height:0px;
-  border-left:10px solid transparent;
-  border-right:10px solid transparent;
-  border-bottom:10px solid white;
-  margin-top:10px;
-  margin-left:10px;
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid white;
+  margin-top: 0px;
+  margin-left: 0px;
 }
 
 .person:hover .drop{
@@ -403,6 +397,7 @@ p {
 
 .person:hover .fa{
   visibility: visible;
+  font-size: 1.1rem;
 }
 
 .event-overlap:hover .event-drop{
@@ -460,6 +455,29 @@ p {
 .card {
   position: absolute;
   z-index: 500;
-  width: 30%;
+  width: 20rem;
   right: 0;
+}
+
+.card-body {
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 0.4rem;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #e9ecefcf;
+    opacity: 1;
+}
+
+.btn-success.disabled, .btn-success:disabled {
+    color: #fff;
+    background-color: #7390cd;
+    border-color: #7390cd;
+}
+
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
 }

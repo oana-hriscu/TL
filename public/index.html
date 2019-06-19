@@ -6,7 +6,6 @@
     <script src="javascripts/xlsx.full.min.js"></script>
     <script src="javascripts/jscolor.js"></script>
     <script src="https://unpkg.com/wtf_wikipedia"></script>
-    <script src="javascripts/contextMenu/contextMenu.min.js"></script>
     <script src="javascripts/re.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     
@@ -27,7 +26,7 @@
 
       <div class="form-group">
         <label for="interval" style="color:white;" >Interval</label>
-        <select class="form-control" id="interval">
+        <select class="form-control" id="interval" disabled=true>
           <option>1</option>
           <option>5</option>
           <option selected>10</option>
@@ -37,8 +36,8 @@
       </div>
 
       <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Adauga element
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled=true>
+            Adaugă element
           </button>
           <div class="dropdown-menu" style="min-width: 20rem;" aria-labelledby="dropdownMenuButton">
             <div class="dropdown-item input-group input-group-sm mb-3">
@@ -55,7 +54,7 @@
             </div>
             <div class="dropdown-item input-group input-group-sm mb-3">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Ocupatie</span>
+                  <span class="input-group-text" id="inputGroup-sizing-sm">Ocupație</span>
                 </div>
                 <input type="text" id="input_ocupatie" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
             </div>
@@ -78,15 +77,17 @@
                 <label for="exampleFormControlTextarea1">Descriere: </label>
                 <textarea class="form-control" id="input_descriere" rows="3"></textarea>
             </div>
-            <div class="add-button"><button type="button" id="add_button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="right" data-content="Eroare">
-                ADAUGA
-              </button></div>
+            <div class="add-button">
+              <button type="button" id="add_button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="right" data-content="Eroare">
+                ADAUGĂ
+              </button>
+            </div>
           </div>
       </div>
   
       <form class="form-inline" id="search_form" action="/" method="post">
-        <input class="form-control mr-sm-2" id="search_bar" name="search_bar" type="search" placeholder="Cauta" aria-label="Search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <button class="btn btn-success my-2 my-sm-0" id="submit_button" type="submit" data-toggle="modal" data-target=".bd-example-modal-lg">Cauta</button>
+        <input class="form-control mr-sm-2" id="search_bar" name="search_bar" type="search" placeholder="Caută" aria-label="Search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled=true>
+          <button class="btn btn-success my-2 my-sm-0" id="submit_button" type="submit" data-toggle="modal" data-target=".bd-example-modal-lg" disabled=true>Caută</button>
       </form>
 
       <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -96,8 +97,8 @@
         </div>
       </div>
 
-      <button class="btn btn-success my-2 my-sm-0" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">ISTORIC</button>
-      <input class="btn btn-success my-2 my-sm-0" id="reset_button" value='RESET' type="button">
+      <button class="btn btn-success my-2 my-sm-0" id="history_button" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2" disabled=true>ISTORIC</button>
+      <input class="btn btn-success my-2 my-sm-0" id="reset_button" value='RESETARE' type="button" disabled=true>
     </nav>
 
     <div id="inner" class="inner_remaining">
@@ -105,7 +106,10 @@
             <div class="card card-body" id = "history">
             </div>
         </div>
-      <div id="axis" class="axis" style='justify-content: space-around;'></div>
+      <div id="axis" class="axis" style='justify-content: space-around; align-items: center;'>
+        <input class="btn btn-success my-2 my-sm-0" id="historyTL_button" value='Timeline istoric' type="button">
+        <input class="btn btn-success my-2 my-sm-0" id="socialTL_button" value='Timeline social' type="button">
+      </div>
       <div id="bar_id" class="bar-axis"></div>
     </div>
   </body>
