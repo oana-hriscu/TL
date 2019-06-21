@@ -8,21 +8,21 @@
     <script src="https://unpkg.com/wtf_wikipedia"></script>
     <script src="javascripts/re.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Berkshire+Swash">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Yantramanav">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="stylesheets/main.css">
-
     <link rel="shortcut icon" href="#" />
-    <title>TIMELINE</title>
+
+    <title>TimelineGenerator</title>
   </head>
 
   <body>
     <nav class="navbar navbar-light bg-dark">
-      <a class="navbar-brand text-white title">Timeline</a>
+      <a class="navbar-brand text-white title">TimelineGenerator</a>
 
       <div class="form-group">
         <label for="interval" style="color:white;" >Interval</label>
@@ -39,7 +39,8 @@
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled=true>
             Adaugă element
           </button>
-          <div class="dropdown-menu" style="min-width: 20rem;" aria-labelledby="dropdownMenuButton">
+
+          <div class="dropdown-menu" id="dropdown_menu" style="min-width: 20rem;" aria-labelledby="dropdownMenuButton">
             <div class="dropdown-item input-group input-group-sm mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-sm">Imagine</span>

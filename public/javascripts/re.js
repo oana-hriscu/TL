@@ -6,6 +6,8 @@ $(function() {
   let eventByPerson = {};
   let p_list = [];
 
+  let s_list = [];
+
   function range_int(start, end, interval) {
     let yearList = [];
     for(item = start - start%interval; item<=end - end%interval + interval; item+=interval){
@@ -294,6 +296,46 @@ $(function() {
     });
   }
 
+  function addToSocialHistory(event) {
+    let history = $('#history');
+    let entry = $('<div/>').addClass('entry');;
+    let about = $('<div/>').addClass('entry-about').attr('style', 'justify-content: space-evenly');
+
+    let title = $('<p/>').addClass('entry-title').text(event['txt']);
+    let date = $('<p/>').addClass('entry-title').text(event['month']+' '+event['year']);
+    let description = $('<p/>').addClass('entry-desc').text(event['desc']);
+    title.appendTo(about);
+    date.appendTo(about);
+    description.appendTo(about);
+
+    let btn = $('<button type="button" class="btn mini-add" id="history_add" data-container="body">ADAUGA</button>');
+    btn.appendTo(about);
+
+    about.appendTo(entry);
+
+    entry.appendTo(history);
+    btn.click(function () {
+
+      if(event['year'] < min_year){
+        min_year = yearInput;
+      }
+
+      if(event['year'] > max_year) {
+        max_year = yearInput
+      }
+
+      let years;
+      years = range1(min_year, max_year);
+
+      socialAxis(years);
+
+      let height = $('.social-year').height() + $('.axis-year').height();
+      $('#bar_id').css({"top": String(height+5)+"px"});
+      s_list.push(event);
+      addSocialEvent(s_list);
+    });
+  }
+
   $('#reset_button').click(function() {
     $('#axis').empty();
     $('#bar_id').empty();
@@ -395,6 +437,144 @@ $(function() {
     });
   });
 
+  function createDropdown() {
+    let container = $('#dropdown_menu');
+    let m = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
+
+    let dateY = $('<div class="dropdown-item input-group input-group-sm mb-3"/>');
+    let subY = $('<div class="input-group-prepend"/>').appendTo(dateY);
+    let spanY = $('<span class="input-group-text" id="inputGroup-sizing-sm"/>').text('An').appendTo(subY);
+    let year = $('<input class="form-control w-25" id="sYear" type="text"/>').appendTo(dateY);
+    dateY.appendTo(container);
+
+    let dateM = $('<div class="dropdown-item input-group input-group-sm mb-3"/>');
+    let subM = $('<div class="input-group-prepend"/>').appendTo(dateM);
+    let spanM = $('<span class="input-group-text" id="inputGroup-sizing-sm"/>').text('Luna').appendTo(subM);
+    let month = $('<select class="form-control w-25" id="sMonth" type="text" placeholder="Ian"/>').appendTo(dateM);
+
+    $(m).each(function() {
+      month.append($("<option>").text(this));
+    });
+
+    let nameEvent = $('<div class="dropdown-item input-group input-group-sm mb-3"/>');
+    let subEv = $('<div class="input-group-prepend"/>').appendTo(nameEvent);
+    let spanEv = $('<span class="input-group-text" id="inputGroup-sizing-sm"/>').text('Eveniment').appendTo(subEv);
+    let inputEv = $('<input type="text" id="input_nume" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"/>').appendTo(nameEvent);
+
+    let descEvent = $('<div class="dropdown-item form-group"/>');
+    let label = $('<label for="exampleFormControlTextarea1"/>').text('Descriere: ').appendTo(descEvent);
+    let txtarea = $('<textarea class="form-control" id="input_descriere" rows="3"/>').appendTo(descEvent);
+
+    let btnDiv = $('<div class="add-button">');
+    let btn = $('<button type="button" id="event_add_button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="right" data-content="Eroare">').text('ADAUGĂ').appendTo(btnDiv);
+
+    dateM.appendTo(container);
+    nameEvent.appendTo(container);
+    descEvent.appendTo(container);
+    btnDiv.appendTo(container);
+
+    $('#event_add_button').click(function() {
+        let yearInput = parseInt($('#sYear').val());
+        let monthInput = $('#sMonth').val().substring(0,3);
+        let title = $('#input_nume').val();
+        let desc = $('#input_descriere').val();
+
+        if(yearInput < min_year){
+          min_year = yearInput;
+        }
+
+        if(yearInput > max_year) {
+          max_year = yearInput
+        }
+
+        let years;
+        years = range1(min_year, max_year);
+
+        socialAxis(years);
+
+        let height = $('.social-year').height() + $('.axis-year').height();
+        $('#bar_id').css({"top": String(height+5)+"px"});
+
+        let event = {
+          year: yearInput,
+          month: monthInput,
+          txt: title,
+          description: desc
+        }
+
+        s_list.push(event);
+        addSocialEvent(s_list);
+        addToSocialHistory(event);
+    });  
+    
+    $(document).on('click', 'div.dropdown div.dropdown-menu', function (e) {
+      e.stopPropagation();
+    });
+  }
+
+  function socialAxis(years) {
+    let container = $('#axis');
+    container.empty();
+
+    for(let j = 0 ; j < years.length; j++){
+      let one = $('<div\>').addClass('one');
+      let year = $('<p\>').addClass('social-year').text(years[j]).appendTo(one);
+
+      let monthDiv = $('<div\>').addClass('axis').appendTo(one);
+      let m = ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Noi', 'Dec'];
+
+      for (let i = 0; i<m.length; i++){
+          let paragraph = $('<p/>').attr('id', 'year_tag').addClass('axis-year').text(m[i]);
+          let line = $('<hr/>').addClass('vertical-line').attr('id', years[j]+m[i]);
+
+          if(m[i] === 'Ian') {
+            line.css({'background': 'black'});
+          }
+
+          let div = $('<div id="axis_element" class="axis-element"></div>'); //0.5% style="padding-left: 5px; padding-right: 5px"
+          paragraph.appendTo(div);
+          line.appendTo(div);
+
+          div.appendTo(monthDiv);
+      }
+
+      one.append(year);
+      one.append(monthDiv);
+
+      container.append(one);
+    }
+  }
+
+  function addSocialEvent(ev_list) {
+    let container = $('#bar_id');
+    container.empty();
+
+    for(let i=0; i<ev_list.length;i++){
+      let auxDiv = $('<div id="parent"/>');
+
+      let loc = $('#'+ev_list[i]['year']+ev_list[i]['month']);
+      let mgLeft = loc.offset()['left'];
+
+      let name = $('<p></p>').addClass('person').text(ev_list[i]['txt']);
+      let bar = $('<hr></hr>').addClass('Evbars');
+      bar.css('width', '8px');
+      bar.css('height', '8px');
+      bar.css('margin-left', String(mgLeft-4)+'px');
+
+      let arrow = $('<div/>').addClass('arrow').appendTo(bar);
+      let drop = $('<div/>').addClass('drop').appendTo(arrow);
+      let tbox = $('<div/>').addClass('tbox');
+
+      $('<div/>').addClass('info-box-description').text(ev_list[i]['description']).appendTo(tbox);
+      tbox.appendTo(drop);
+      name.appendTo(auxDiv);
+      bar.appendTo(auxDiv);
+      auxDiv.appendTo(container);
+      
+      name.css('margin-left', mgLeft-name.outerWidth()/2+'px');
+    }
+  }
+
   $('#historyTL_button').click(function () {
     $('#axis').css({"align-items": ""}).empty();
     $('#dropdownMenuButton').attr('disabled', false);
@@ -407,8 +587,12 @@ $(function() {
 
   $('#socialTL_button').click(function () {
     $('#axis').css({"align-items": ""}).empty();
+    $('#axis').css({"justify-content": "flex-start"});
     $('#dropdownMenuButton').attr('disabled', false);
     $('#history_button').attr('disabled', false);
     $('#reset_button').attr('disabled', false);
+    $('#dropdown_menu').empty();
+
+    createDropdown();
   })
 });
