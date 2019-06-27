@@ -27,13 +27,14 @@ In this current day and age information is available to almost anyone who has ac
 
 The concept of using images in order to convey the meaning of data has been around for centuries. From maps curated by famous world explorers to anatomy charts and architectural plans, drawings have proven to be a powerful tool in helping humans understand various topics. This notion is widely known under the name "Data visualization": the attempt of taking textual information and putting it in a visual context in order to simplify it and engage the viewer's visual senses. It is a quick and easy way to convey information and help the reader get a better understanding. It can range from simple bar graphs or pie charts to very complex and artistic videos. \par
 
-\textbf{Timelines} are part of the previously mentioned concept and are visual representations of important events or periods of time in chronological order. Their main purpose is to help the viewer get a better perspective on the progress of historical or modern events or on the life of important personalities. Timelines represent an elegant way of visualizing data and make it easier for professionals to plan, manage and analyze relevant temporal facts. They are very useful in educational fields since they aid in documenting any type of development by providing an easy-to-understand image of past and ongoing trends.\par
+\textbf{Timelines} are part of the previously mentioned concept and are visual representations of important events or periods of time in chronological order. Their main purpose is to help the viewer get a better perspective on the progress of historical or modern events or on the life of important personalities. Timelines represent an elegant way of visualizing data and make it easier for professionals to plan, manage and analyze relevant temporal facts. They are very useful in educational fields since they aid in documenting any type of development by providing an easy-to-understand image of past and ongoing trends (Fig. 1).\par
 
 \begin{figure}[b]
 \centerline{\includegraphics[scale=1.8]{media_timeline}}
+\caption{An example of a horizontal timeline about Medieval England}
 \end{figure}
 
-Timelines can be very flexible when it comes to the visual aspect. The most common method of representation is the horizontal approach where numbers, depicting decades, years, months, days, etc. are displayed on an axis. The data to be displayed is usually represented vertically by labeled parallel bars that span over a given time period. This design is popular among companies and is known as a Gantt Chart. It is mainly used to illustrate and plan the progress of a project. The bars in a Gantt Chart show tasks to be performed while the horizontal axis displays the start and finish dates for the aforementioned tasks.\par
+Timelines can be very flexible when it comes to the visual aspect. The most common method of representation is the horizontal approach where numbers, depicting decades, years, months, days, etc. are vertically displayed on an axis by labeled parallel bars that span over a given time period. This design is popular among companies and is known as a Gantt Chart. It is mainly used to illustrate and plan the progress of a project. The bars in a Gantt Chart show tasks to be performed while the horizontal axis displays the start and finish dates for the aforementioned tasks.\par
 
 While horizontal timelines are perfect for showcasing spans, vertical timelines can be very useful when the data is represented by a single piece of temporal information (one year, one day, etc). Such events include product launches, critical discoveries, the founding of institutions or other important achievements. For example, a vertical timeline would be very useful for showcasing a history of the most important space missions conducted by a space agency.\par
 
@@ -55,13 +56,14 @@ Other timelines make use of more creative design concepts. Designers have taken 
 
 People like to see visual representations of any type of information and even more so if it is about themselves. Therefore, in more recent years social media sites have implemented more or less the concept of timelines in order to help their users examine and review their personal data. Notable examples include LinkedIn and Facebook. \par
 
-\begin{wrapfigure}{r}{0.4\textwidth}
+\begin{wrapfigure}{r}{0.55\textwidth}
 	\vspace*{-1.2cm}
     \centering
     \includegraphics[width=0.5\textwidth]{linkedin}
-	\vspace{-80pt} 
+    \caption{Template used by LinkedIn to display a CV}
+	\vspace{-50pt} 
 \end{wrapfigure}
-The LinkedIn platform is a website mainly used for professional networking. The timeline aspect of this service is its ability to allow people to create their CV and update it whenever changes occur. Thus possible employers can easily analyze the career history of users who are looking for a new job.\par
+The LinkedIn platform is a website mainly used for professional networking. The timeline aspect of this service is its ability to allow people to create their CV and update it whenever changes occur. Thus possible employers can easily analyze the career history of users who are looking for a new job (Fig 4).\par
 
 Facebook, the American social media platform, revamped the method of displaying user posts in 2011. Status updates, photos, interactions with apps and events were now displayed in a chronological feed, which bore the name “Timeline”.\par
 
@@ -83,6 +85,8 @@ The \textbf{third chapter} describes in detail the ideas that were used to desig
 
 The \textbf{fourth chapter} focuses on the AI aspect of the project. It describes the general concept of each algorithm and which alterations have been made in order to adapt them to the timeline application. \par
 
+Finally, the \textbf{last chapter} concludes the thesis by restating and summarizing the main aspects and themes that have been discussed.
+
 \newpage
 
 \chapter {Topic motivations}
@@ -91,19 +95,19 @@ The \textbf{fourth chapter} focuses on the AI aspect of the project. It describe
 
 As of 2019, a few applications that deal with generating timelines have been created. Most of them are subscription based and have mandatory registration, requiring a monthly payment in order to gain and maintain full access.\par
 
-TimeGlider is one such application. Events can be recorded by hour, day, month or year, multimedia such as images, video and audio files can be added, and the final result can be shared via accessible URLs. The downsides of TimeGlider are lack of free service and the fact that the manipulation of the eventual timeline can become difficult to master.\par
+Timeglider\textsuperscript{2} is one such application. Events can be recorded by hour, day, month or year, multimedia such as images, video and audio files can be added, and the final result can be shared via accessible URLs. The downsides of Timeglider are lack of free service and the fact that the manipulation of the eventual timeline can become difficult to master.\par
 
-Tiki-toki is another online timeline maker software. This application encourages a more creative approach as it enables the user to choose different designs and perspectives when creating a timeline. However, just as TimeGlider, Tiki-toki is a very restrictive application for free users, allowing the creation of a single timeline. Subscriptions range from 7.50\$ to 25\$ a month and although very professional and detailed, it does not represent a good alternative for those who cannot afford to pay for a monthly service.\par
+Tiki-toki\textsuperscript{3} is another online timeline maker software. This application encourages a more creative approach as it enables the user to choose different designs and perspectives when creating a timeline. However, just as Timeglider, Tiki-toki is a very restrictive application for free users, allowing the creation of a single timeline. Subscriptions range from 7.50\$ to 25\$ a month and although very professional and detailed, it does not represent a good alternative for those who do not wish to pay for a monthly service.\par
 
-TimeToast, TimeRime, Sutori are some other services that implement similar designs and strategies. TimelineGenerator takes inspiration from such applications and uses it in order to develop and offer a free and easy-to-use web application.\par
+Timetoast\textsuperscript{4}, Preceden\textsuperscript{5}, Sutori\textsuperscript{6} are other services that implement similar timeline designs and strategies. TimelineGenerator takes inspiration from such applications and uses it in order to develop and offer a free and easy-to-use web application.\par
 
 \section {Web applications: advantages \& disadvantages}
 
 \begin{wrapfigure}{r}{0.4\textwidth}
-	\vspace*{-1cm}
+	\vspace*{-2cm}
     \centering
     \includegraphics[width=0.4\textwidth]{web}
-	\vspace{-10pt} 
+	\vspace{-40pt} 
 \end{wrapfigure}
 
 A web application can be described as any computer program that uses web technologies and a web browser as its client in order to perform a given functionality. Web applications use a combination of server-side (storage and retrieval of information) and client-side (presentation of information) scripting languages in order to be developed. They represent a popular choice for many developers as they do not require the construction of a client and are not OS specific, an internet connection and an installed browser (features which are present on almost every computer nowadays) being the only requirements for such an application to run, in contrast with classic desktop applications, which require installation on a local computer. \par 
@@ -115,7 +119,9 @@ However, there are some downsides to web applications that must be taken into co
 Web-based applications come with an extensive list of advantages that outweigh the disadvantages. They are easy to use and develop, updates are instant on every device, sometimes require no installation and are a very secure option for users as well as developers. \par
 
 \begin{figure}[b]
+\vspace*{-1cm}
 \centerline{\includegraphics[scale=0.1]{webapp}}
+\caption{Web application development (Source: HorizonCore InfoSoft Pvt. Ltd.)}
 \end{figure}
 
 The main purpose of the TimelineGenerator application is to allow a user to display temporal data in a simple, easy-to-read manner. Although many programming languages provide the ability to create a graphical user interface, very few of them are aesthetically pleasing, fully customizable and well documented. The Java Swing GUI widget toolkit, as well as the TKinter module for Python, have both been considered in the beginning as methods for creating the application. But although very popular, they present a very rigid, old-fashioned display which is not ideal when it comes to data visualization. \par
@@ -135,30 +141,39 @@ The technology stack represents an important part in the development of a softwa
 \section {Front-End}
 Front-end web development also referred to as the “client-side”, converts data into a graphical interface for the user to view and interact with it through digital interaction using HTML, CSS and JavaScript.
 
-\begin{wrapfigure}{r}{0.2\textwidth}
+\begin{wrapfigure}{r}{0.35\textwidth}
 	\vspace*{-1.5cm}
     \centering
     \includegraphics[width=0.2\textwidth]{bootstrap}
+	\caption{Bootstrap logo}
 	\vspace{-10pt} 
 \end{wrapfigure}
 
 \subsection {Bootstrap}
 Perhaps one of the most popular HTML, CSS and JS frameworks, Bootstrap is a free-to-use, open-source, comprehensive library created for designing responsive mobile-first web pages. It consists of design templates for navigation, forms, buttons, typography, dropdowns and many other interface components. \par
 
-Originally intended as a blueprint for Twitter, Bootstrap was created and developed by Mark Otto and Jacob Thornton as a framework meant to encourage consistency across internal tools. It comes with several JavaScript components in the form of jQuery plugins. Currently, the framework is at its fourth release, with the fifth one already in development.
+Originally intended as a blueprint for Twitter, Bootstrap was created and developed by Mark Otto and Jacob Thornton\textsuperscript{9} as a framework meant to encourage consistency across internal tools. It comes with several JavaScript components in the form of jQuery plugins. Currently, the framework is at its fourth release, with the fifth one already in development.
 
 \begin{wrapfigure}{r}{0.3\textwidth}
-	\vspace*{-1.5cm}
+	\vspace*{-0.5cm}
     \centering
     \includegraphics[width=0.2\textwidth]{jquery}
+    \caption{jQuery logo}
 	\vspace{-10pt} 
 \end{wrapfigure}
 \subsection {jQuery}
 jQuery is a light-weight, feature-rich JavaScript library designed to simplify the HTML DOM tree traversal and manipulation, event handling and animation. jQuery was originally created in January 2006 at BarCamp NYC by John Resig, influenced by Dean Edwards' earlier cssQuery library. Just as Bootstrap, it is a free,  open-source software and is currently used by 78\% of the most popular websites nowadays. \par
 jQuery is preferred by a big number of developers since it greatly simplifies DOM manipulation syntax and provides the ability to add event handlers to it instead of the classic HTML event attributes which call JavaScript functions.
 
+\begin{wrapfigure}{r}{0.3\textwidth}
+	\vspace*{-0.5cm}
+    \centering
+    \includegraphics[width=0.35\textwidth]{picker}
+	\caption{Jscolor's color picker}
+	\vspace{-5pt} 
+\end{wrapfigure}
 \subsection {jscolor}
-Jscolor is a self-sufficient JavaScript library consisting of a single JS file, for implementing a customizable web color picker component. Jscolor does not require any framework in order to function properly but can be used in accordance with one. The library is also supported by all modern browsers including Google Chrome, Firefox, Internet Explorer 7 and Safari.
+Jscolor is a self-sufficient JavaScript library consisting of a single JS file, for implementing a customizable web color picker component. A \textbf{color picker} is a graphical user interface widget that is used to select colors and create color schemes. Jscolor does not require any framework in order to function properly but can be used in accordance with one. The library is also supported by all modern browsers including Google Chrome, Firefox, Internet Explorer 7 and Safari.
 
 
 \section {Back-End}
@@ -168,6 +183,7 @@ Back-end web development is commonly referred to as the "server-side" and repres
 	\vspace*{-1cm}
     \centering
     \includegraphics[width=0.3\textwidth]{nodejs}
+	\caption{jNode.js logo}
 	\vspace{-10pt} 
 \end{wrapfigure}
 \subsection {Node.js}
@@ -178,7 +194,8 @@ The architecture of Node.js can be characterized as event-driven and capable of 
 	\vspace*{-1cm}
     \centering
     \includegraphics[width=0.3\textwidth]{npm}
-	\vspace{-10pt} 
+	\caption{NPM logo}
+	\vspace{-40pt} 
 \end{wrapfigure}
 Most Node.js libraries are hosted on the NPM website which includes open-source web frameworks such as Express.js, which are meant to accelerate the development of applications. 
 
@@ -196,6 +213,7 @@ Body-parser is a middleware for Node.js which parses incoming request bodies bef
 	\vspace*{-1cm}
     \centering
     \includegraphics[width=0.3\textwidth]{mediawiki}
+	\caption{MediaWiki logo}
 	\vspace{-10pt} 
 \end{wrapfigure}
 \subsection {MediaWiki action API}
@@ -211,6 +229,7 @@ Compromise is a JavaScript natural-language processing library that interprets, 
 	\vspace*{-1.5cm}
     \centering
     \includegraphics[width=0.3\textwidth]{wiki}
+	\caption{Wikipedia logo}
 	\vspace{-10pt} 
 \end{wrapfigure}
 \subsection {WTF\_Wikipedia}
@@ -221,6 +240,7 @@ WTF\_Wikipedia is a JavaScript library created by Spencer Kyle with the intent t
 \begin{figure}[h]
 \vspace*{3cm}
 \centerline{\includegraphics[scale=0.4]{stack}}
+\caption{An example for a technology stack (Source: Lvivity)}
 \end{figure}
 \newpage
 
@@ -235,7 +255,7 @@ The following two sections describe in full detail the ideas and functionalities
 Typical page elements such as buttons, forms, and dropdowns were created using the Bootstrap framework. The colors were kept to a minimum in order to maintain a classic look. \par
 A unique component present in the application is the timeline section of the page. This element contains several members bearing the following names in the front-end code of the project:
 \begin{enumerate}
-  \item \textbf{Year Axis}: numbers representing years are enumerated according to the user's preference. They can be either displayed consecutively or only the years divisible by 5, 10, 50 or 100 in order to keep the axis more compact (the number chosen to divide by is called a \textbf{step}). The years and their corresponding axes are spaced according to the width of the screen when there are less than 42 years to display. The width is divided by the number of years and thus a \textbf{unit} is obtained. When this number is exceeded, the unit takes the constant value of 2.5rem in order to expand the width of the timeline and save the page from looking too cramped. 
+  \item \textbf{Year Axis}: numbers representing years are enumerated according to the user's preference. They can be either displayed consecutively or only the years divisible by 5, 10, 50 or 100 in order to keep the axis more compact (the number chosen to divide by is called a \textbf{step}). The years and their corresponding axes are spaced according to the width of the screen when there are less than 42 years to display. The width is divided by the number of years and thus a \textbf{unit} is obtained. When this number is exceeded, the unit takes the constant value of 2.5rem in order to expand the width of the timeline and save the page from looking too cramped. A vertical timeline design was not created due to its visual incompatibility with most computer screens' orientation (horizontal). 
   \item \textbf{Bar}: bars represent spans or durations. Their lengths are computed using the \textit{unit} mentioned above and the formula:\\\centerline{\textit{(end\_of\_span - start\_of\_span) / step * unit}}
 \end{enumerate}
 
@@ -270,7 +290,7 @@ Afterward, the \textbf{Cheerio} module is used to load the HTML of the provided 
 
     ["Albert Einstein",
     ["Albert Einstein"],
-    ["Albert Einstein (n. 14 martie 1879, Ulm – d. 18 aprilie 1955, Princeton) a fost un fizician teoretician de etnie evreiască, născut în Germania, apatrid din 1896, elvețian din 1899, emigrat în                 1933 în SUA, naturalizat american în 1940, profesor universitar la Berlin și Princeton."],
+    ["Albert Einstein (n. 14 martie 1879, Ulm – d. 18 aprilie 1955, Princeton) a fost un fizician teoretician de etnie evreiască, născut în Germania, apatrid din 1896, elvețian din 1899, emigrat în 1933 în SUA, naturalizat american în 1940, profesor universitar la Berlin și Princeton."],
     ["https://ro.wikipedia.org/wiki/Albert\_Einstein"]]\par
 
 The data is then transformed into a valid JavaScript object by using the function textit{JSON.parse(result)} in order to make the process easier and quicker by having accessible lists and values. If the second list of the object is empty, it will be sent to the client and the modal responsible for showing results will display a message for nothing found (\textit{Nu am gasit nimic}).\par
@@ -310,6 +330,7 @@ Artificial Intelligence is a branch of computer science which deals with the sim
 
 \begin{figure}[b]
 \centerline{\includegraphics[scale=0.16]{ai}}
+\caption {Artificial intelligence and its subbranches}
 \end{figure}
 
 A core part of artificial intelligence, \textit{machine learning} was developed with the intent to make computers learn, reason and self-correct with or without any kind of supervision. Akin to the early stages of human intellectual development, pattern recognition, classification, and numerical regression have become staples in the training of computerized systems. \par
@@ -325,11 +346,11 @@ The TimelineGenerator application does not delve too deeply into the development
     \includegraphics[width=0.3\textwidth]{nlp}
 	\vspace{-10pt} 
 \end{wrapfigure}
-Human beings are the most advanced species on earth and this achievement is mainly due to the ability to communicate verbally and nonverbally in order to share information. The human language is one of the most diverse and complex parts of mankind considering that a total of 6500 languages exist.\par
+Human beings are the most advanced species on earth and this achievement is mainly due to the ability to communicate verbally, via languages, and nonverbally in order to share information. Human languages are diverse and complex considering that as of today, a total of 7,111 languages exist\textsuperscript{11}.\par
 
 Natural language processing is a branch of artificial intelligence meant to help computers understand, interpret and operate on the human language in order to fill the gap between humans and machines. While not a new science, it is a rapidly advancing technology thanks to the high-interest rates in the field, the availability of big data and powerful computing algorithms. NLP has many applications and can be found in common web services such as language translation applications (\textit{Google Translate}), word processors that check text accuracy (\textit{Grammarly, Microsoft Word}), personal assistants (\textit{Cortana, Alexa, Siri}) or interactive voice response applications used in call centers. \par
 
-Language processing can prove to be a difficult task, the main cause being the complexity of human languages. Computers use what is known as \textit{machine language} or \textit{machine code} in order to function, a language largely incomprehensible to most humans. Natural vocabulary has to be converted into machine language for it to be understood by computerized systems. Rules for passing information from one human to another vary from basic to high-level and abstract. It is almost impossible for a machine to detect sarcastic tones or emotions in spoken or written language. \par
+Language processing can prove to be a difficult task, the main cause being the complexity of human languages. Computers use what is known as \textit{machine language} or \textit{machine code} in order to function, a language largely incomprehensible to most humans. Natural vocabulary has to be converted into machine language for it to be understood by computerized systems. Rules for passing information from one human to another vary from basic to high-level and abstract. It is almost impossible for a machine to detect sarcastic tones or emotions in spoken or written language unless \textit{deep learning}\textsuperscript{15} (a subfield of machine learning that uses algorithms influenced by the structure and function of the brain called artificial neural networks) is used. \par
 
 NLP works by extracting, examining and applying patterns in accumulated data. Computers nowadays are improving their understanding of human languages and their complexities. To speed up the process of analysis, experts make use of several traditional linguistic fields including morphology, syntax, semantics, pragmatics, and phonology. Algorithms can be used to extract the meanings of sentences, tokenize them into parts of speech, extract terminologies, etc. \par
 
@@ -342,11 +363,12 @@ Natural language processing represents a major supporting part in the developmen
 
 \section{Named entity recognition}
 \begin{figure}[b]
-\centerline{\includegraphics[scale=0.55]{ner}}
+\centerline{\includegraphics[scale=0.45]{ner}}
+\caption{An example of named entity recognition}
 \end{figure}
 Named entity recognition (\textit{NER}), also known as \textit{entity extraction} or \textit{identification} is a subtask of natural language processing that seeks to identify and classify into pre-defined categories named entities present in a given text. NER adds more substance to scanned data and can aid machines in understanding natural language. \par
 
-In any document, there are bound to be particular words that serve as special entities with more unique context. These terms usually represent people, organizations, places, etc., and denoted by proper names. Full named-entity recognition is divided into two problems: name detection and name classification in accordance with the type of entity they refer to. The first issue mainly refers to a segmentation problem where names are defined as contiguous spans of tokens such that something like \textit{"University of Oxford"} is considered a single name but \textit{"Oxford"} is disregarded as the name of a geographical location because it is contained within the word group. The second issue deals with picking a suitable ontology for the selected word or group of words. \par
+In any document, there are particular words that serve as special entities with more unique context. These terms usually represent people, organizations, places, etc., and denoted by proper names. Full named-entity recognition is divided into two problems: name detection and name classification in accordance with the type of entity they refer to. The first issue mainly refers to a segmentation problem where names are defined as contiguous spans of tokens such that something like \textit{"University of Oxford"} is considered a single name, but the fact that inside this name, the substring \textit{Oxford} is itself a name, is ignored. The second issue deals with picking a suitable ontology for the selected word or group of words.\textsuperscript{18} \par
 
 NER algorithms have been designed to use linguistic grammar-based techniques and statistical methods. While hand-crafted grammar-based systems can typically obtain better, more accurate results, they require extensive work from computational linguists and cannot be created in a short time. Statistical NER systems, on the other hand, require considerable amounts of training data that has been annotated manually. Semisupervised approaches are a possible solution for avoiding the effort required by annotations. \par
 
@@ -360,7 +382,7 @@ Temporal information extraction is the identification of relational data represe
 \begin{figure}[h]
 \centering
 \centerline{\includegraphics[width=1\textwidth]{tee}}
-\caption{Temporal information extraction example (taken from Artuur Leeuwenberg and Marie-Francine Moens' \textbf{A Survey on Temporal Reasoning for Temporal Information Extraction from Text})}
+\caption{Temporal information extraction example (taken from Artuur Leeuwenberg and Marie-Francine Moens' \textbf{A Survey on Temporal Reasoning for Temporal Information Extraction from Text}\textsuperscript{22})}
 \end{figure}
 
 The current criterion for temporal information extraction is composed of three stages: recognition of events and temporal expressions, recognition of temporal relations among them and time-line construction from temporal relations. \par
@@ -375,14 +397,15 @@ Indefinite interval relations can be constructed from these basic relations, whi
 \centerline{\textbf{TV \{d, s, f\} breakfast}}
 \centerline{\textbf{breakfast \{\textless, m\} bed}}
 
-\begin{figure}[h]
-\caption{Allen's interval algebra rules (Source: Wikipedia)}
+\begin{figure}[b]
+\caption{Allen's interval algebra rules (Source: Wikipedia\textsuperscript{18})}
 \vspace*{1cm}
 \centerline{\includegraphics[scale=1]{allen}}
 \end{figure}
 
-Temporal information in languages can be conveyed in many ways. Verb tenses, specific temporal discourse markers or date, time, or duration expressions help identify necessary data. Background knowledge can also be a powerful determinant for detecting temporal information, but it is a harder method to convey into instructions that can be understood by a machine. Extraction systems work by directly associating time stamps. It is a straightforward and efficient method however it sacrifices recall, seeing how numerous events do not have associated timestamps.
+Temporal information in languages can be conveyed in many ways. Verb tenses, specific temporal discourse markers or date, time, or duration expressions help identify necessary data. Background knowledge can also be a powerful determinant for detecting temporal information, but it is a harder method to convey into instructions that can be understood by a machine. Extraction systems work by directly associating time stamps. It is a straightforward and efficient method however it sacrifices recall, seeing how numerous events do not have associated timestamps.\par
 
+The TimelineGenerator application features the ability to detect events in the text of the fetched Wikipedia articles. The temporal information is extracted with the help of regular expressions. Since years are required in order for the information to be considered and added as an event, the expressions search for every corresponding instance, then the sentence that contains the said instance is extracted and added to the bar that represents the span.\par
 
 \textbf{Conclusions}: Artificial intelligence and its sub-branches present powerful tools that can create applications that range from simple to intricate. They represent fields that are in continuous rapid development as more and more people are becoming interested in building machines capable of thinking on their own or executing human-specific tasks.
 \newpage
@@ -390,7 +413,7 @@ Temporal information in languages can be conveyed in many ways. Verb tenses, spe
 \chapter{Conclusions}
 Working with or learning temporal information can prove to be a daunting and overwhelming task at times. Many people usually resort to creating visual representations for this type of data in order to get an improved perspective and gain a better understanding. Creating visual depictions is not a recent activity and can be seen in many historical documents throughout time, but only in recent years, the possibility of using the digital environment in order to generate said imagery has become a more compelling idea.\par
 
-The TimelineGenerator application was created with the purpose of offering a simple, free and easy-to-use service that can visually generate a timeline. Although its main target audience is students, it can be effortlessly used by anyone without requiring specific knowledge.\par
+The TimelineGenerator application was created with the purpose of offering a simple, free and easy-to-use service that can visually generate a timeline.Although its main target audience is students, it can be effortlessly used by anyone without requiring specific knowledge.\par
 
 TimelineGenerator was created as a web application using a technology stack that includes elements ranging from well-known markup languages and standards such as HTML and CSS to libraries and APIs that are seldom seen and only used in specific contexts. The application uses a simple design to avoid unnecessary cluttering and gives the option to add events manually or with the help of a custom search engine which filters and processes Wikipedia articles. The latter feature is achieved with the help of specific APIs and JavaScript libraries and was added in order to facilitate the process of building a timeline. This characteristic has also been implemented on the basis of artificial intelligence and some of its representative braches such as natural language processing and temporal information extraction.\par
 
@@ -407,11 +430,25 @@ TimelineGenerator is not an intricate and complex web application with numerous 
 \begin{enumerate}
 \item \textit{Harsimran Bedia Sangameshwar Patilb Swapnil Hingmireb Girish K. Palshikarb},  2017, \href{https://aclweb.org/anthology/W17-5912}{\textbf{Event Timeline Generation from History Textbooks}}, Department of CSE, IIT Patna, India, TCS Research, Pune, India;
 
+\item Timeglider, \url{https://timeglider.com/about}
+
+\item Tiki-Toki, \url{https://www.tiki-toki.com/}
+
+\item Timetoast, \url{https://www.timetoast.com/}
+
+\item Preceden, \url{https://www.preceden.com/?utm_source=timerime&utm_campaign=homepage}
+
+\item Sutori, \url{https://www.sutori.com/}
+
 \item \textit{Magic Web Solutions}, 2019 ,\href{https://www.magicwebsolutions.co.uk/blog/the-benefits-of-web-based-applications.htm}{\textbf{The benefits of web applications}};
 
 \item \textit{Ethan Brown}, 2014, \href{http://www.vanmeegern.de/fileadmin/user_upload/PDF/Web_Development_with_Node_Express.pdf}{\textbf{Web development with Node \& Express}};
 
+\item \textit{Bootstrap}, \url{https://en.wikipedia.org/wiki/Bootstrap_(front-end_framework)}
+
 \item \textit{Tania Rascia}, 2015, \href{https://www.taniarascia.com/what-is-bootstrap-and-how-do-i-use-it/}{\textbf{What is Bootstrap}};
+
+\item \textit{Ethnologue}, \href{https://www.ethnologue.com/guides/how-many-languages}{\textbf{How many languages are there in the world?}};
 
 \item \textit{Kristian Kersting}, 2018, \href{https://ml-research.github.io/papers/kersting2018aiml_frontiers.pdf}{\textbf{Machine Learning and Artificial Intelligence: Two Fellow Travelers on the Quest for Intelligent Behavior in Machines}}, Machine Learning Lab, CS Department and Centre for Cognitive Science, Darmstadt University of Technology, Darmstadt, German;
 
@@ -419,9 +456,13 @@ TimelineGenerator is not an intricate and complex web application with numerous 
 
 \item \textit{Elizabeth D. Liddy}, 2001, \href{https://surface.syr.edu/cgi/viewcontent.cgi?article=1043&context=istpub} {\textbf{Natural Language Processing}}, Syracuse University;
 
+\item \textit{Jason Brownlee}, 2016, \href{https://machinelearningmastery.com/what-is-deep-learning/} {\textbf{What is Deep Learning?}};
+
 \item \textit{Michael J. Garbade}, 2018, \href{https://becominghuman.ai/a-simple-introduction-to-natural-language-processing-ea66a1747b32}{\textbf{A simple introduction to natural language processing}};
 
 \item \textit{Nasir Safdari}, 2018, \href{https://towardsdatascience.com/named-entity-recognition-ner-meeting-industrys-requirement-by-applying-state-of-the-art-deep-698d2b3b4ede}{\textbf{Named Entity Recognition (NER) with keras and tensorflow}};
+
+\item \textit{Named-entity recognition}, \url{https://en.wikipedia.org/wiki/Named-entity_recognition};
 
 \item \textit{Archana Goyal, Manish Kumar, Vishal Gupta}, 2017,\href{https://pdfs.semanticscholar.org/2060/5fdae23f6e8d945deb22e09c46cecebb4f35.pdf}{\textbf{Named Entity Recognition: Applications, Approaches and Challenges}}, PG Department of Information Technology, GGDSD College (India), Department of Computer Science and Application, Panjab University Regional Centre, (India), University Institute of Engineering \& Technology,Panjab University (India);
 

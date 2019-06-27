@@ -164,8 +164,8 @@ padding-bottom: 0.5rem;
 .inner_remaining {
   flex : 15;
   background-color: #BEBCC9;
-  overflow-x: scroll;
-  overflow-y: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
   display: flex;
   flex-flow: column;
   position: relative;
@@ -533,4 +533,35 @@ p {
 .Evbars:hover .info-box-description{
   font-size: small;
   visibility: visible;
+}
+
+.Evbars:hover .tbox{
+  background: #96969654;
+  width: inherit;
+  border-radius: 0px 5px 5px 5px;
+}
+
+.Evbars:hover .fa{
+  visibility: visible;
+  font-size: 1.1rem;
+}
+
+.mainButtons{
+  font-size: x-large;
+  font-family: 'Varela Round', serif;
+  height: 15rem;
+  width: 15rem;
+  border-radius: 10rem;
+  transition: all 0.5s ease;
+}
+
+.mainButtons:hover {
+  position: relative;
+  background: #4b5f88;;
+  -webkit-transform:scale(1.05);
+  -moz-transform:scale(1.05);
+  transform:scale(1.05);
+  -webkit-box-shadow: 0px 0px 19px  rgba(50, 50, 50, 0.95);
+  -moz-box-shadow:    0px 0px 19px  rgba(50, 50, 50, 0.95);
+  box-shadow:         0px 0px 19px  rgba(50, 50, 50, 0.95);
 }

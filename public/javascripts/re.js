@@ -10,9 +10,19 @@ $(function() {
 
   function range_int(start, end, interval) {
     let yearList = [];
-    for(item = start - start%interval; item<=end - end%interval + interval; item+=interval){
+
+    let item;
+    if(start < 0) {
+      item = start - start%interval - interval;
+    }
+    else {
+      item = start - start%interval;
+    }
+
+    for(item; item<=end - end%interval + interval; item+=interval){
       yearList.push(item);
     }
+    
     return yearList;
   }
 
@@ -100,6 +110,14 @@ $(function() {
       else if(listOfPeople[i]['deces'] === 2019) {
         person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-prezent)').appendTo(auxDiv);
       }
+      else if(listOfPeople[i]['nastere'] < 0 || listOfPeople[i]['deces'] < 0){
+        if(listOfPeople[i]['nastere'] < 0 && listOfPeople[i]['deces'] > 0){
+          person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+Math.abs(listOfPeople[i]['nastere'])+' î.Hr. -'+listOfPeople[i]['deces']+')').appendTo(auxDiv);
+        }
+        if(listOfPeople[i]['nastere'] < 0 && listOfPeople[i]['deces'] < 0){
+          person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+Math.abs(listOfPeople[i]['nastere'])+' î.Hr. -'+Math.abs(listOfPeople[i]['deces'])+' î.Hr.)').appendTo(auxDiv);
+        }
+      }
       else {
         person = $('<p></p>').addClass('person').css('margin-left', mgLeft+'px').text(listOfPeople[i]['_nume'] +' ('+listOfPeople[i]['nastere']+'-'+listOfPeople[i]['deces']+')').appendTo(auxDiv);
       }
@@ -149,6 +167,12 @@ $(function() {
   }
 
   function checkYears(start, end, startCheck, endCheck) {
+    if (isNaN(start) || isNaN(end)) 
+    {
+      alert("Introduceți numere valide în casetele de interval");
+      return false;
+    }
+
     if(start < end) {
       if((startCheck==true && endCheck==true) || (startCheck==false && endCheck==true)){
         return false;
@@ -161,6 +185,16 @@ $(function() {
     }
     return true;
   }
+
+  function validURL(str) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str);
+}
 
   function validateForm() {
     let interval = parseInt($('#interval').val());
@@ -179,7 +213,12 @@ $(function() {
       return false;
     }
 
+    if(!validURL(imagine)){
+      imagine ="face.jpg";
+    }
+
     if(nume=='' || ocup=='' || start=='' || end=='') {
+      alert('Completați toate câmpurile necesare (nume, ocupație, interval)')
       return false;
     }
     else {
@@ -238,8 +277,16 @@ $(function() {
   });
 
   function extractYears(json, passed_text) {
+
     if(json['born'] != undefined && json['died'] != undefined) {
-      return [parseInt(json['born'].match(/\d{4}/)[0]), parseInt(json['died'].match(/\d{4}/)[0])];
+      let bc = /BC/i;
+      if((json['born'].match(bc) || []).length) {
+        return [2010, 2020];//complete
+      }
+      if((json['died'].match(bc) || []).length) {
+        return [2010, 2020];//complete///////////////////////////////////////////////////////////
+      }
+      else return [parseInt(json['born'].match(/\d{4}/)[0]), parseInt(json['died'].match(/\d{4}/)[0])];
     }
     if(json['born'] != undefined && json['died'] === undefined) {
       return [parseInt(json['born'].match(/\d{4}/)[0]), 2019];
@@ -252,6 +299,7 @@ $(function() {
       let re_death1 = /d\. (\d{1,2}) (ianuarie|februarie|martie|aprilie|mai|iunie|iulie|august|septembrie|octombrie|noiembrie|decembrie) (\d{4})/i;
       let re_birth2 = /n\. (\d{4})/i;
       let re_death2 = /d\. (\d{4})/i;
+      let before = /î\.Hr\./i;
 
       if(re_birth1.test(passed_text)){
         birth = parseInt(passed_text.match(re_birth1)[3]);
@@ -267,6 +315,8 @@ $(function() {
         death = parseInt(passed_text.match(re_death2)[1]);
       }
       
+      
+
       return [birth, death];
     }
     else return [2010, 2020];
@@ -291,8 +341,38 @@ $(function() {
 
     entry.appendTo(history);
     btn.click(function () {
-      p_list.push(pDict);
-      addTLElements(p_list, years, interval, eventByPerson);
+      if(!$('#interval').prop("disabled")){
+        min_year = 5000;
+        max_year = -5000;
+        console.log('sup');
+        $('#interval').attr('disabled', true);
+
+        if(pDict['nastere'] < min_year){
+        min_year=pDict['nastere'];
+        }
+
+        if(pDict['deces'] > max_year){
+          max_year=pDict['deces'];
+        }
+
+        let years;
+        interval = parseInt($('#interval').val());
+        if(interval === 1){
+          years = range1(min_year, max_year);
+        }
+        else {
+          years = range_int(min_year, max_year, interval);
+        }
+
+        yearAxis(years);
+        p_list.push(pDict);
+        addTLElements(p_list, years, interval, eventByPerson);
+
+      }
+      else {
+        p_list.push(pDict);
+        addTLElements(p_list, years, interval, eventByPerson);
+      }
     });
   }
 
@@ -314,14 +394,15 @@ $(function() {
     about.appendTo(entry);
 
     entry.appendTo(history);
+
     btn.click(function () {
 
       if(event['year'] < min_year){
-        min_year = yearInput;
+        min_year = event['year'];
       }
 
       if(event['year'] > max_year) {
-        max_year = yearInput
+        max_year = event['year'];
       }
 
       let years;
@@ -334,6 +415,7 @@ $(function() {
       s_list.push(event);
       addSocialEvent(s_list);
     });
+
   }
 
   $('#reset_button').click(function() {
@@ -343,6 +425,8 @@ $(function() {
     min_year = 5000;
     max_year = -5000;
     p_list.length = 0;
+    s_list.length = 0;
+    console.log('blabla');
     eventByPerson.length = 0;
   });
 
@@ -409,6 +493,9 @@ $(function() {
               years = range_int(min_year, max_year, interval);
             }
 
+            let randomColor = "ab2567";
+            randomColor = Math.floor(Math.random()*16777215).toString(16);
+
             yearAxis(years);
             let pDict = {
               _nume: data[1][i],
@@ -416,7 +503,7 @@ $(function() {
               nastere: y[0],
               deces: y[1],
               descriere: data[2][i].replace(/&amp;/g,'&'),
-              culoare: "ab2567",
+              culoare: randomColor,
               img: data[5][i]
               };
 
@@ -478,6 +565,12 @@ $(function() {
         let monthInput = $('#sMonth').val().substring(0,3);
         let title = $('#input_nume').val();
         let desc = $('#input_descriere').val();
+
+        if (isNaN(yearInput)) 
+        {
+          alert('Introduceți un număr valid în caseta "An"');
+          return false;
+        }
 
         if(yearInput < min_year){
           min_year = yearInput;
@@ -565,10 +658,22 @@ $(function() {
       let drop = $('<div/>').addClass('drop').appendTo(arrow);
       let tbox = $('<div/>').addClass('tbox');
 
+      let editable = $('<div/>').addClass('editMenu');
+      let trash = $('<i class="fa fa-trash" id="trash"></i>');
+
+      trash.click(function () {
+        console.log(ev_list[i]);
+        $(this).closest('#parent').remove();
+        ev_list.splice(i, 1);
+        console.log(ev_list);
+      });
+
       $('<div/>').addClass('info-box-description').text(ev_list[i]['description']).appendTo(tbox);
       tbox.appendTo(drop);
       name.appendTo(auxDiv);
       bar.appendTo(auxDiv);
+      trash.appendTo(editable);
+      editable.appendTo(drop);
       auxDiv.appendTo(container);
       
       name.css('margin-left', mgLeft-name.outerWidth()/2+'px');

@@ -74,7 +74,7 @@ app.post('/', function(req, res) {
             search_result.push.apply(search_result, [[]]);
             search_result.push.apply(search_result, [[]]);
             refineList(search_result);
-            console.log(search_result);
+            //console.log(search_result);
 
             if (search_result[1].length === 0) {
                 res.send(search_result);
@@ -134,7 +134,7 @@ app.post('/', function(req, res) {
                         });
         
                         //console.log(infoboxes);
-                        //console.log(search_result);
+                        console.log(search_result);
                         res.send(search_result);
                     });
                 }
@@ -165,7 +165,6 @@ function descDups(info, entry_list) {
 }
 
 function validateInfo(info, date, birth, death) {
-
     if(date <= birth || date > death){
         return false;
     }
@@ -253,7 +252,7 @@ app.get('/something', function (req, res) {
             if(keyA > keyB) return 1;
             return 0;
         });
-        //console.log(eventList);
+        console.log(eventList);
         res.send(eventList);
     });
     
