@@ -63,7 +63,6 @@ $(function() {
       }
     }
     $('#bar_id').css('margin-top', $('#year_tag').height());
-    
   }
 
   function addEvents(bar, unit, birth, eventList){
@@ -86,9 +85,8 @@ $(function() {
 
     let container = $('#bar_id');
     container.empty();
-    let margin = $('.vertical-line').offset()['left']+0.5; //add to everything
+    let margin = $('.vertical-line').offset()['left']+0.5; //add to every bar
     let unit = margin *2; //width of year-bar element
-    //let width = unit * years.length; //width of container
     for(let i=0; i<listOfPeople.length; i++) {
       let span;
 
@@ -277,16 +275,12 @@ $(function() {
   });
 
   function extractYears(json, passed_text) {
+    if(Number.isInteger(json['born']) && Number.isInteger(json['died'])){
+      return [json['born'], json['died']];
+    }   
 
     if(json['born'] != undefined && json['died'] != undefined) {
-      let bc = /BC/i;
-      if((json['born'].match(bc) || []).length) {
-        return [2010, 2020];//complete
-      }
-      if((json['died'].match(bc) || []).length) {
-        return [2010, 2020];//complete///////////////////////////////////////////////////////////
-      }
-      else return [parseInt(json['born'].match(/\d{4}/)[0]), parseInt(json['died'].match(/\d{4}/)[0])];
+      return [parseInt(json['born'].match(/\d{4}/)[0]), parseInt(json['died'].match(/\d{4}/)[0])];
     }
     if(json['born'] != undefined && json['died'] === undefined) {
       return [parseInt(json['born'].match(/\d{4}/)[0]), 2019];
@@ -499,7 +493,7 @@ $(function() {
             yearAxis(years);
             let pDict = {
               _nume: data[1][i],
-              ocupatie: data[4][i],
+              ocupatie: "",
               nastere: y[0],
               deces: y[1],
               descriere: data[2][i].replace(/&amp;/g,'&'),

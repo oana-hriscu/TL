@@ -63,6 +63,13 @@ function refineList(res_list) {
 }
 
 
+function extractBC(date){
+    let reg = /(\d+) BC/i;
+
+    let auxDate = -1 * parseInt(date.match(reg)[1]);
+    return auxDate;
+}
+
 app.post('/', function(req, res) {
     let search = req.body.name;
     search = search.replace(/ /g, '%20');
@@ -100,7 +107,18 @@ app.post('/', function(req, res) {
                                 search_result[5][search_result[1].indexOf(doc.title())] = String(doc.images(0).json()['thumb']);
                             }
 
-                            search_result[6][search_result[1].indexOf(doc.title())] = {born: obj.data_nașterii || obj.birth_date, died: obj.data_decesului || obj.death_date};
+                            let bday = obj.born || obj.birth_date;
+                            let dday = obj.died || obj.death_date;
+                            if(bday !== undefined && bday.includes('BC')) {
+                                bday = extractBC(bday);
+                            console.log('minus', bday);
+                            }
+                            if(dday !== undefined && dday.includes('BC')) {
+                                dday = extractBC(dday);
+                                console.log('minus', dday);
+                            }
+
+                            search_result[6][search_result[1].indexOf(doc.title())] = {born: bday, died: dday};
                             //console.log(search_result);
                             res.send(search_result);
                         }
@@ -125,7 +143,17 @@ app.post('/', function(req, res) {
                                 }
 
                                 search_result[4][search_result[1].indexOf(doc.title())] = doc.infobox(0)['_type'];
-                                search_result[6][search_result[1].indexOf(doc.title())] = {born: obj.born || obj.birth_date, died: obj.died || obj.death_date};
+
+                                let bday = obj.born || obj.birth_date;
+                                let dday = obj.died || obj.death_date;
+                                if(bday !== undefined && bday.includes('BC')) {
+                                    bday = extractBC(bday);
+                                }
+                                if(dday !== undefined && dday.includes('BC')) {
+                                    dday = extractBC(dday);
+                                }
+
+                                search_result[6][search_result[1].indexOf(doc.title())] = {born: bday, died: dday};
         
                                 return {
                                     name: doc.title() || obj.name
