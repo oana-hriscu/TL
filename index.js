@@ -18,7 +18,7 @@ let wiki_content = 'https://ro.wikipedia.org/w/api.php?action=query&format=json&
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const PORT = process.nextTick.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
@@ -280,7 +280,7 @@ app.get('/something', function (req, res) {
             if(keyA > keyB) return 1;
             return 0;
         });
-        console.log(eventList);
+        //console.log(eventList);
         res.send(eventList);
     });
     
